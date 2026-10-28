@@ -1,0 +1,32 @@
+/* KIRMC — tokens de diseño (estilo sticker japonés, inspirado en Ki-Poo) */
+:root {
+  --red: #e51e1e;
+  --red-deep: #b51212;
+  --white: #ffffff;
+  --cream: #fff8ec;
+  --cream-2: #fbe8d2;
+  --brown: #3a1a10;
+  --brown-2: #4e2618;
+  --yellow: #ffcd3c;
+
+  --ink: var(--brown);
+  --line-soft: rgba(58, 26, 16, 0.14);
+
+  --online: #2fbf62;
+  --playing: var(--yellow);
+  --away: #ff8a3c;
+  --offline: #b9a59a;
+
+  --font-display: "Dela Gothic One", "Yu Gothic", system-ui, sans-serif;
+  --font-body: "Segoe UI", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
+
+  /* Contorno grueso + sombra sólida desplazada = look "sticker" */
+  --border: 3px solid var(--brown);
+  --sticker: 0 5px 0 var(--brown);
+  --sticker-sm: 0 3px 0 var(--brown);
+  --radius: 18px;
+  --radius-sm: 12px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  color-scheme: light;
+}

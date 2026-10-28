@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "KIRMC Launcher",
+  "version": "0.1.0",
+  "identifier": "com.kirmc.launcher",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "KIRMC Launcher",
+        "width": 1240,
+        "height": 760,
+        "minWidth": 1040,
+        "minHeight": 640,
+        "center": true,
+        "decorations": false,
+        "backgroundColor": "#E51E1E"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: blob: http://127.0.0.1:* https://mc-heads.net https://textures.minecraft.net http://textures.minecraft.net https://launchercontent.mojang.com https://cdn.modrinth.com https://api.capes.dev https://kirmc.example; connect-src 'self' ipc: http://ipc.localhost wss://kirmc.example; style-src 'self' 'unsafe-inline'; font-src 'self'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

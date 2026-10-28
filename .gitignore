@@ -1,0 +1,12 @@
+node_modules
+dist
+src-tauri/target
+src-tauri/gen
+.env
+.env.local
+# Binarios: se publican como GitHub Release, no en el repositorio
+release/
+# Generados por `tauri icon` para móviles (no se usan en escritorio)
+src-tauri/icons/android
+src-tauri/icons/ios
+.claude/
