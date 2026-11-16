@@ -97,7 +97,8 @@
   .btn svg { width: 22px; height: 22px; }
 
   /* ---------- Portada ---------- */
-  .hero { padding: 70px 0 30px; color: var(--white); text-align: center; }
+  .hero { padding: 70px 0 30px; color: var(--white); text-align: center; position: relative; isolation: isolate; }
+  .hero::before { content: ""; position: absolute; inset: 0 0 auto; height: 620px; z-index: -1; background: linear-gradient(180deg, rgba(58, 26, 16, 0.25), rgba(229, 30, 30, 0.55) 70%, var(--red)), url("img/client-panorama.jpg") center 35% / cover no-repeat; }
   .badge { display: inline-flex; align-items: center; gap: 8px; background: var(--brown); color: var(--yellow); border-radius: 999px; padding: 6px 14px; font-weight: 800; font-size: 13px; }
   .badge i { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3); }
   h1 { font-family: var(--display); font-size: clamp(40px, 7vw, 84px); line-height: 1.02; margin: 20px auto 14px; text-shadow: 5px 5px 0 var(--brown); max-width: 13em; }
@@ -150,6 +151,13 @@
   summary::after { content: "+"; font-family: var(--display); color: var(--red); }
   details[open] summary::after { content: "–"; }
   details p { color: var(--muted); line-height: 1.6; margin: 12px 0 0; }
+  .ncards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; margin-bottom: 26px; }
+  .ncard { background: var(--cream); border: var(--border); border-radius: 18px; box-shadow: var(--sticker-sm); overflow: hidden; color: var(--ink); }
+  .ncard img { aspect-ratio: 1200 / 630; object-fit: cover; width: 100%; border-bottom: var(--border); }
+  .ncard div { padding: 12px 16px 16px; }
+  .ncard h4 { margin: 0 0 6px; font-family: var(--display); font-size: 17px; }
+  .ncard p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 14px; }
+  .ncard time { font-size: 12px; font-weight: 800; color: var(--red); }
   .news { display: grid; gap: 14px; max-width: 820px; }
   .news article { background: var(--cream); border: var(--border); border-radius: 18px; box-shadow: var(--sticker-sm); padding: 16px 20px; }
   .news h4 { margin: 0 0 4px; font-family: var(--display); font-size: 18px; } .news time { color: var(--muted); font-weight: 700; font-size: 13px; }
@@ -342,13 +350,13 @@
       <div><span class="num">02</span><h3 data-t="f2.t">Cosméticos 3D que ven los demás</h3>
         <p data-t="f2.d">Sombreros, pelo, ropa con mangas, alas, auras, mascotas, herramientas a la espalda y un Mini Yo con tu skin. Los jugadores con KIRMC los ven dentro del juego.</p>
         <a class="btn btn-yellow btn-sm" href="#/tienda" data-t="f2.cta">Probar en la tienda</a></div>
-      <div class="f-media"><div class="shot"><img src="img/cos-wings.jpg" alt="Cosméticos KIRMC dentro del juego" loading="lazy" width="854" height="480"></div></div>
+      <div class="f-media"><div class="shot"><img src="img/news/collection.jpg" alt="Cosméticos KIRMC dentro del juego" loading="lazy" width="1200" height="630"></div></div>
     </div>
     <div class="feature reveal">
       <div><span class="num">03</span><h3 data-t="f3.t">Emotes y bailes</h3>
         <p data-t="f3.d">Mantén la tecla B para abrir la rueda de emotes: saluda, siéntate o baila. Hay 22, con páginas que se cambian con la rueda del ratón.</p>
         <a class="btn btn-cream btn-sm" href="#/tienda?cat=gesture" data-t="f3.cta">Ver los emotes</a></div>
-      <div class="f-media"><div class="shot"><img src="img/cos-oni.jpg" alt="Jugador con cosméticos de oni" loading="lazy" width="854" height="480"></div></div>
+      <div class="f-media"><div class="shot"><img src="img/news/emotes.jpg" alt="Emotes y bailes de KIRMC" loading="lazy" width="1200" height="630"></div></div>
     </div>
   </div>
 </section>
@@ -374,7 +382,7 @@
       <div><span class="num">07</span><h3 data-t="f7.t">Skins y capas que sí se ven</h3>
         <p data-t="f7.d">Cuenta de Microsoft o modo no-premium, con skins y capas visibles. Las capas KIRMC también funcionan como élitros.</p>
         <a class="btn btn-yellow btn-sm" href="#/capas" data-t="f7.cta">Ver las capas</a></div>
-      <div class="f-media"><div class="shot"><img src="img/game-nametag.jpg" alt="Nombre de jugador con el icono de KIRMC" loading="lazy" width="854" height="480"></div></div>
+      <div class="f-media"><div class="shot"><img src="img/news/hd-capes.jpg" alt="Capas KIRMC en alta resolución" loading="lazy" width="1200" height="630"></div></div>
     </div>
     <div class="feature reveal">
       <div><span class="num">08</span><h3 data-t="f8.t">Cuatro temas, tres idiomas</h3>
@@ -392,7 +400,7 @@
       <div class="shot reveal"><img src="img/game-title.jpg" alt="Menú principal ft. KIRMC" loading="lazy" width="854" height="480"></div>
       <div class="shot reveal"><img src="img/game-hud.jpg" alt="HUD de KIRMC Client" loading="lazy" width="854" height="480"></div>
       <div class="shot reveal"><img src="img/game-hud-glass.jpg" alt="HUD estilo Cristal" loading="lazy" width="854" height="480"></div>
-      <div class="shot reveal"><img src="img/cos-kabuto.jpg" alt="Kabuto y máscara kitsune" loading="lazy" width="854" height="480"></div>
+      <div class="shot reveal"><img src="img/news/portal-capes.jpg" alt="Capas de portal" loading="lazy" width="1200" height="630"></div>
       <div class="shot reveal"><img src="img/launcher-shop.jpg" alt="Tienda del launcher" loading="lazy" width="1240" height="760"></div>
       <div class="shot reveal"><img src="img/launcher-play.jpg" alt="Pantalla Jugar" loading="lazy" width="1240" height="760"></div>
     </div>
@@ -402,7 +410,8 @@
 <section id="novedades" class="band">
   <div class="wrap">
     <span class="eyebrow" style="background:var(--red);color:#fff" data-t="news.eyebrow">Novedades</span>
-    <h2 data-t="news.title">Últimas versiones</h2>
+    <h2 data-t="news.title">Noticias</h2>
+    <div class="ncards" id="ncards"></div>
     <div class="news" id="news"><p class="hint" data-t="news.loading">Cargando novedades…</p></div>
     <p style="margin-top:18px"><a href="https://github.com/kirpulrbx-max/KIRMC-Launcher/releases" rel="noopener" style="font-weight:800" data-t="dl.all">Todas las versiones y novedades</a></p>
   </div>
@@ -557,7 +566,7 @@
       "f6.t": "Friends and chat", "f6.d": "Add friends, see who's playing and chat in real time with notifications. The oni icon marks KIRMC users.",
       "f7.t": "Skins and capes that actually show", "f7.d": "Microsoft account or offline mode, with visible skins and capes. KIRMC capes also work as elytra.", "f7.cta": "See the capes",
       "f8.t": "Four themes, three languages", "f8.d": "KIRMC, Dark and Minecraft themes, smooth animations and game sounds. In Spanish, English and Japanese, and it updates itself.",
-      "gal.eyebrow": "Screenshots", "gal.title": "Made to look good", "news.eyebrow": "What's new", "news.title": "Latest versions", "news.loading": "Loading news…",
+      "gal.eyebrow": "Screenshots", "gal.title": "Made to look good", "news.eyebrow": "What's new", "news.title": "News", "news.loading": "Loading news…",
       "dl.all": "All versions and changelog", "dl.title": "Ramen time!", "dl.sub": "Download KIRMC Launcher, create your first instance and play.", "dl.btn": "Download", "dl.java": "Java included automatically",
       "faq.title": "FAQ", "q1": "Is it free?", "a1": "Yes. KIRMC Launcher is free. K coins are earned every day and can also be topped up if you want.",
       "q2": "Windows says the file isn't common. Is it safe?", "a2": "That's normal for new apps without a Microsoft signature. Click “More info” and “Run anyway”. The code is on GitHub.",
@@ -602,7 +611,7 @@
       "f6.t": "フレンドとチャット", "f6.d": "フレンドを追加し、誰が遊んでいるか確認、通知つきでリアルタイムにチャット。鬼アイコンが KIRMC ユーザーの目印。",
       "f7.t": "ちゃんと見えるスキンとマント", "f7.d": "Microsoft アカウントでもオフラインでも、スキンとマントが表示されます。KIRMC のマントはエリトラにもなります。", "f7.cta": "マントを見る",
       "f8.t": "4 つのテーマ、3 つの言語", "f8.d": "KIRMC・ダーク・Minecraft テーマ、なめらかなアニメーションとゲームのサウンド。スペイン語・英語・日本語対応、自動アップデート。",
-      "gal.eyebrow": "スクリーンショット", "gal.title": "見た目にもこだわって", "news.eyebrow": "新着情報", "news.title": "最新バージョン", "news.loading": "読み込み中…",
+      "gal.eyebrow": "スクリーンショット", "gal.title": "見た目にもこだわって", "news.eyebrow": "新着情報", "news.title": "ニュース", "news.loading": "読み込み中…",
       "dl.all": "すべてのバージョンと更新履歴", "dl.title": "ラーメンタイム！", "dl.sub": "KIRMC Launcher をダウンロードして、最初のインスタンスを作って遊ぼう。", "dl.btn": "ダウンロード", "dl.java": "Java は自動で用意",
       "faq.title": "よくある質問", "q1": "無料ですか？", "a1": "はい。KIRMC Launcher は無料です。K コインは毎日もらえ、チャージもできます。",
       "q2": "Windows が警告を出します。安全ですか？", "a2": "Microsoft の署名がない新しいアプリでは普通です。「詳細情報」→「実行」を押してください。コードは GitHub にあります。",
@@ -649,6 +658,7 @@
     $$(".lang button").forEach((b) => b.classList.toggle("on", b.dataset.lang === next));
     try { localStorage.setItem("kirmc-lang", next); } catch {}
     renderShop();
+    renderNews();
   }
   $$(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
@@ -843,6 +853,22 @@
     if (id && BY_ID[id] && !state.worn.includes(id) && BY_ID[id].kind !== "gesture" && BY_ID[id].kind !== "trail") { state.worn = [...state.worn.filter((w) => BY_ID[w]?.slot !== BY_ID[id].slot), id]; }
     $("#results").hidden = true; $("#q").value = ""; $("#q").blur();
   });
+
+  // ---------- Noticias de cosméticos y capas ----------
+  const NEWS = [
+    ["portal-capes", "2026-11-16", { es: ["Capas de portal", "Portal del Nether, del End y de Salida: tres capas animadas que también funcionan como élitros."], en: ["Portal capes", "Nether, End and End Gateway portals: three animated capes that also work as elytra."], ja: ["ポータルのマント", "ネザー・エンド・エンドゲートウェイの 3 種類のアニメーションマント。エリトラにもなります。"] }],
+    ["hd-capes", "2026-11-16", { es: ["Capas en alta resolución", "Las 13 capas de la colección, redibujadas con cuatro veces más detalle."], en: ["High-resolution capes", "All 13 collection capes, redrawn with four times more detail."], ja: ["高解像度マント", "コレクションの 13 種類のマントを 4 倍の解像度で描き直しました。"] }],
+    ["classic-capes", "2026-11-16", { es: ["Capas clásicas arregladas", "Oni Cape y las capas del KIRPASS ya no tienen huecos en los élitros."], en: ["Classic capes fixed", "The Oni Cape and KIRPASS capes no longer have holes in their elytra."], ja: ["クラシックマントを修正", "鬼マントと KIRPASS のマントのエリトラの穴を直しました。"] }],
+    ["emotes", "2026-11-16", { es: ["12 bailes nuevos", "67, Hilo Dental, Griddy, Macarena, Robot y más. Mantén B para abrir la rueda."], en: ["12 new dances", "67, Floss, Griddy, Macarena, Robot and more. Hold B to open the wheel."], ja: ["新しいダンス 12 種", "67、フロス、グリディ、マカレナ、ロボットなど。B 長押しでホイール。"] }],
+    ["collection", "2026-11-16", { es: ["Cosméticos rehechos", "Ropa con mangas, alas, cuernos, auras nuevas y 28 herramientas a la espalda."], en: ["Cosmetics remade", "Clothes with sleeves, wings, horns, new auras and 28 tools on your back."], ja: ["コスメをリニューアル", "袖つきの服、翼、角、新しいオーラ、背中の道具 28 種。"] }],
+    ["welcome-cape", "2026-11-16", { es: ["Capa de Bienvenida", "¿Cuenta nueva? Canjea BIENVENIDO-KIRMC en Ajustes y llévatela gratis."], en: ["Welcome Cape", "New account? Redeem BIENVENIDO-KIRMC in Settings and get it free."], ja: ["ウェルカムマント", "新規アカウントは設定で BIENVENIDO-KIRMC を入力して無料で入手。"] }],
+    ["mini-me", "2026-11-16", { es: ["Mini Yo", "Tu mini tú se sienta en tu hombro o tu cabeza, o camina a tu lado a ras de suelo."], en: ["Mini Me", "Your mini you sits on your shoulder or head, or walks beside you on the ground."], ja: ["ミニ自分", "ミニ自分が肩や頭に座ったり、横を歩いたりします。"] }],
+  ];
+  function renderNews() {
+    const el = document.getElementById("ncards");
+    if (!el) return;
+    el.innerHTML = NEWS.map(([img, date, tx]) => { const [ti, su] = tx[lang] || tx.es; return `<article class="ncard"><img src="img/news/${img}.jpg" alt="" loading="lazy" width="1200" height="630"><div><time>${new Date(date).toLocaleDateString()}</time><h4>${esc(ti)}</h4><p>${esc(su)}</p></div></article>`; }).join("");
+  }
 
   // ---------- Última versión y novedades (GitHub) ----------
   fetch("https://api.github.com/repos/kirpulrbx-max/KIRMC-Launcher/releases?per_page=3")
