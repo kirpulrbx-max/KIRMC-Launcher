@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KIRMC Launcher</title>
-<meta name="description" content="KIRMC Launcher: el launcher de Minecraft con alma de oni. Instancias, mods de Modrinth, cosméticos 3D, amigos y tu propio cliente con módulos.">
+<title>KIRMC — Launcher y cliente de Minecraft</title>
+<meta name="description" content="KIRMC: launcher y cliente de Minecraft con alma de oni. Módulos HUD, cosméticos 3D, emotes, capas, amigos y chat.">
 <meta property="og:title" content="KIRMC Launcher">
-<meta property="og:description" content="El launcher de Minecraft con alma de oni: instancias, mods, cosméticos 3D, amigos y el KIRMC Client.">
+<meta property="og:description" content="Un launcher. Todo tu Minecraft: instancias, mods, cosméticos 3D, emotes, amigos y el KIRMC Client.">
 <meta property="og:image" content="img/launcher-play.jpg">
 <meta name="theme-color" content="#E51E1E">
 <link rel="icon" href="img/icon.png">
@@ -15,119 +15,134 @@
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #E51E1E; --red-2: #c3151b; --white: #FFFFFF; --cream: #fff8ec; --brown: #3A1A10; --yellow: #FFCD3C;
+    --red: #E51E1E; --red-2: #c3151b; --white: #FFFFFF; --cream: #fff8ec; --brown: #3A1A10; --brown-2: #4a2417; --yellow: #FFCD3C;
     --ink: #3A1A10; --muted: #7a5a4c; --border: 3px solid var(--brown);
     --sticker: 6px 6px 0 var(--brown); --sticker-sm: 4px 4px 0 var(--brown);
     --display: "Dela Gothic One", system-ui, sans-serif; --body: "M PLUS Rounded 1c", system-ui, sans-serif;
+    --common: #9aa3ad; --rare: #3a8bd5; --epic: #a45be0; --legendary: #f0a52a; --exclusive: #e5437a;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
   body { margin: 0; font-family: var(--body); font-weight: 500; color: var(--ink); background: var(--red); overflow-x: hidden; }
   img { max-width: 100%; height: auto; display: block; }
   a { color: inherit; }
-  .wrap { width: min(1160px, 100% - 32px); margin-inline: auto; }
+  button { font: inherit; color: inherit; }
+  [hidden] { display: none !important; }
+  .wrap { width: min(1200px, 100% - 32px); margin-inline: auto; }
+  :focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
 
-  /* Fondo con patrón que se mueve (como el launcher) */
   .pattern { position: fixed; inset: -200px; z-index: -1; opacity: 0.16; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='18' y='52' font-size='34' font-family='sans-serif' fill='%23fff'%3E%E9%AC%BC%3C/text%3E%3Ctext x='96' y='132' font-size='30' font-family='sans-serif' fill='%23fff'%3E%E3%83%A9%3C/text%3E%3Cpath d='M118 20l4 11 11 4-11 4-4 11-4-11-11-4 11-4z M38 96l3 8 8 3-8 3-3 8-3-8-8-3 8-3z' fill='%23fff'/%3E%3C/svg%3E");
     animation: drift 40s linear infinite; }
   @keyframes drift { to { transform: translate(160px, 160px); } }
-  @media (prefers-reduced-motion: reduce) { .pattern, .mascot, .steam span { animation: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .pattern, .mascot { animation: none !important; } html { scroll-behavior: auto; } }
 
-  /* Navegación */
-  nav { position: sticky; top: 0; z-index: 20; background: var(--brown); color: var(--white); border-bottom: var(--border); }
-  nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
-  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--display); font-size: 22px; letter-spacing: 0.02em; }
-  .logo img { width: 36px; height: 36px; border-radius: 10px; }
-  .logo small { font-size: 12px; color: var(--yellow); }
-  .links { display: flex; gap: 4px; margin-left: auto; }
-  .links a { text-decoration: none; padding: 8px 12px; border-radius: 999px; font-weight: 800; font-size: 14px; }
-  .links a:hover { background: rgba(255, 255, 255, 0.12); }
+  /* ---------- Navegación ---------- */
+  nav { position: sticky; top: 0; z-index: 30; background: var(--brown); color: var(--white); border-bottom: var(--border); }
+  nav .wrap { display: flex; align-items: center; gap: 10px; height: 68px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--display); font-size: 22px; letter-spacing: 0.02em; margin-right: 6px; }
+  .logo img { width: 38px; height: 38px; border-radius: 10px; }
+  .links { display: flex; gap: 2px; align-items: center; }
+  .links > a, .drop > button { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; padding: 9px 12px; border-radius: 999px; font-weight: 800; font-size: 15px;
+    background: none; border: 0; cursor: pointer; white-space: nowrap; }
+  .links > a:hover, .drop > button:hover, .links > a.on { background: rgba(255, 255, 255, 0.12); }
+  .links > a.on { color: var(--yellow); }
+  .new { font-size: 10px; letter-spacing: 0.06em; background: var(--red); color: #fff; padding: 2px 6px; border-radius: 6px; font-weight: 800; }
+  .drop { position: relative; }
+  .drop > button svg { width: 14px; height: 14px; transition: transform 0.15s; }
+  .drop.open > button svg.chev { transform: rotate(180deg); }
+  .menu { position: absolute; top: calc(100% + 10px); left: 0; min-width: 230px; background: var(--cream); color: var(--ink); border: var(--border); border-radius: 16px;
+    box-shadow: var(--sticker-sm); padding: 8px; display: none; z-index: 40; }
+  .drop.open .menu { display: block; }
+  .menu.right { left: auto; right: 0; }
+  .menu a, .menu button { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; text-decoration: none; padding: 10px 12px; border-radius: 10px;
+    font-weight: 800; font-size: 15px; background: none; border: 0; cursor: pointer; }
+  .menu a:hover, .menu button:hover { background: #fde7c8; }
+  .menu svg { width: 18px; height: 18px; flex: none; color: var(--red); }
+  .menu hr { border: 0; border-top: 2px dashed #e6cfae; margin: 6px 4px; }
+  .who { display: flex; align-items: center; gap: 10px; padding: 8px 12px 10px; }
+  .who img { width: 40px; height: 40px; border-radius: 10px; border: 2px solid var(--brown); background: #fde7c8; }
+  .who b { display: block; font-size: 15px; } .who small { color: var(--muted); font-weight: 700; }
+
+  .search { position: relative; flex: 1; max-width: 340px; margin-left: auto; }
+  .search input { width: 100%; height: 42px; border-radius: 999px; border: 2px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.1); color: #fff;
+    font: 700 14px var(--body); padding: 0 16px 0 40px; }
+  .search input::placeholder { color: rgba(255, 255, 255, 0.65); }
+  .search > svg { position: absolute; left: 14px; top: 12px; width: 18px; height: 18px; opacity: 0.8; pointer-events: none; }
+  .results { position: absolute; top: calc(100% + 10px); left: 0; right: 0; min-width: 280px; background: var(--cream); color: var(--ink); border: var(--border); border-radius: 16px;
+    box-shadow: var(--sticker-sm); padding: 8px; max-height: 60vh; overflow: auto; z-index: 40; }
+  .results h5 { margin: 8px 10px 4px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .results a { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; text-decoration: none; font-weight: 800; font-size: 14px; }
+  .results a:hover, .results a.sel { background: #fde7c8; }
+  .results img { width: 30px; height: 30px; border-radius: 6px; image-rendering: pixelated; background: #2b2e36; }
+  .results small { color: var(--muted); font-weight: 700; margin-left: auto; }
+  .results p { margin: 10px; color: var(--muted); font-size: 14px; }
+
   .lang { display: flex; background: rgba(255, 255, 255, 0.1); border-radius: 999px; padding: 3px; }
-  .lang button { border: 0; background: none; color: var(--white); font: 800 12px var(--body); padding: 6px 10px; border-radius: 999px; cursor: pointer; }
+  .lang button { border: 0; background: none; color: var(--white); font: 800 12px var(--body); padding: 6px 9px; border-radius: 999px; cursor: pointer; }
   .lang button.on { background: var(--yellow); color: var(--brown); }
+  .acct > button { padding: 4px 10px 4px 4px; background: rgba(255, 255, 255, 0.1); }
+  .acct > button img { width: 34px; height: 34px; border-radius: 50%; background: var(--cream); }
+  .burger { display: none; width: 42px; height: 42px; border-radius: 12px; border: 0; background: rgba(255, 255, 255, 0.12); cursor: pointer; }
+  .burger svg { width: 22px; height: 22px; margin: auto; display: block; color: #fff; }
 
-  /* Botones */
+  /* ---------- Botones ---------- */
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 26px; border-radius: 999px; border: var(--border);
-    font: 800 17px var(--body); text-decoration: none; cursor: pointer; box-shadow: var(--sticker-sm); transition: transform 0.15s, box-shadow 0.15s; }
+    font: 800 17px var(--body); text-decoration: none; cursor: pointer; box-shadow: var(--sticker-sm); transition: transform 0.15s, box-shadow 0.15s; color: var(--brown); }
   .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--brown); }
   .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--brown); }
-  .btn-yellow { background: var(--yellow); color: var(--brown); }
-  .btn-cream { background: var(--cream); color: var(--brown); }
+  .btn-yellow { background: var(--yellow); } .btn-cream { background: var(--cream); } .btn-red { background: var(--red); color: #fff; }
   .btn-big { padding: 18px 34px; font-size: 20px; font-family: var(--display); }
+  .btn-sm { padding: 9px 16px; font-size: 14px; box-shadow: 3px 3px 0 var(--brown); }
   .btn svg { width: 22px; height: 22px; }
 
-  /* Hero */
-  .hero { padding: 64px 0 40px; color: var(--white); }
-  .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; }
+  /* ---------- Portada ---------- */
+  .hero { padding: 70px 0 30px; color: var(--white); text-align: center; }
   .badge { display: inline-flex; align-items: center; gap: 8px; background: var(--brown); color: var(--yellow); border-radius: 999px; padding: 6px 14px; font-weight: 800; font-size: 13px; }
   .badge i { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3); }
-  h1 { font-family: var(--display); font-size: clamp(44px, 7vw, 86px); line-height: 0.95; margin: 18px 0 10px; text-shadow: 5px 5px 0 var(--brown); letter-spacing: 0.01em; }
-  h1 span { display: block; color: var(--yellow); font-size: 0.42em; letter-spacing: 0.32em; text-shadow: 3px 3px 0 var(--brown); }
-  .lead { font-size: clamp(17px, 2vw, 20px); line-height: 1.55; max-width: 34em; margin: 0 0 26px; }
-  .cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
-  .meta { margin-top: 14px; font-size: 14px; opacity: 0.9; font-weight: 700; }
-  .stage { position: relative; min-height: 420px; }
+  h1 { font-family: var(--display); font-size: clamp(40px, 7vw, 84px); line-height: 1.02; margin: 20px auto 14px; text-shadow: 5px 5px 0 var(--brown); max-width: 13em; }
+  h1 em { font-style: normal; color: var(--yellow); display: block; }
+  .lead { font-size: clamp(17px, 2vw, 21px); line-height: 1.55; max-width: 36em; margin: 0 auto 28px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: center; }
+  .meta { margin-top: 14px; font-size: 14px; opacity: 0.92; font-weight: 700; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 44px auto 0; max-width: 900px; }
+  .stat { background: var(--brown); border-radius: 20px; padding: 18px 10px; border: 3px solid var(--brown); box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.25); }
+  .stat b { display: block; font-family: var(--display); font-size: clamp(28px, 4vw, 44px); color: var(--yellow); line-height: 1.1; }
+  .stat span { font-weight: 800; font-size: 14px; }
+  .stage { position: relative; max-width: 980px; margin: 54px auto 0; }
   .shot { border-radius: 18px; border: var(--border); box-shadow: var(--sticker); overflow: hidden; background: var(--brown); }
-  .stage .shot { transform: rotate(2.5deg); margin-top: 40px; }
-  .mascot { position: absolute; width: 46%; left: -14%; bottom: -36px; filter: drop-shadow(6px 6px 0 var(--brown)); animation: bob 3.2s ease-in-out infinite; }
+  .mascot { position: absolute; width: 22%; left: -6%; bottom: -30px; filter: drop-shadow(6px 6px 0 var(--brown)); animation: bob 3.2s ease-in-out infinite; }
   @keyframes bob { 50% { transform: translateY(-12px) rotate(-3deg); } }
-  .steam { position: absolute; left: 4%; bottom: 46%; display: flex; gap: 10px; }
-  .steam span { width: 8px; height: 26px; border-radius: 8px; background: rgba(255, 255, 255, 0.7); animation: steam 2.4s ease-in-out infinite; }
-  .steam span:nth-child(2) { animation-delay: 0.6s; } .steam span:nth-child(3) { animation-delay: 1.2s; }
-  @keyframes steam { 0% { opacity: 0; transform: translateY(10px) scaleY(0.6); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(-30px) scaleY(1.2); } }
 
-  /* Secciones */
   section { padding: 70px 0; }
   .eyebrow { display: inline-block; font-weight: 800; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--yellow); background: var(--brown); padding: 6px 12px; border-radius: 8px; }
-  h2 { font-family: var(--display); font-size: clamp(32px, 4.5vw, 52px); line-height: 1.05; margin: 14px 0 12px; color: var(--white); text-shadow: 4px 4px 0 var(--brown); }
+  h2 { font-family: var(--display); font-size: clamp(30px, 4.5vw, 50px); line-height: 1.08; margin: 14px 0 12px; color: var(--white); text-shadow: 4px 4px 0 var(--brown); }
   .sub { color: var(--white); font-size: 18px; max-width: 40em; line-height: 1.55; margin: 0 0 34px; }
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .card { background: var(--cream); border: var(--border); border-radius: 22px; box-shadow: var(--sticker); padding: 24px; transition: transform 0.2s; }
-  .card:hover { transform: translateY(-4px) rotate(-0.6deg); }
-  .card h3 { font-family: var(--display); font-size: 21px; margin: 14px 0 8px; }
-  .card p { margin: 0; color: var(--muted); line-height: 1.55; }
-  .ico { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--red); color: var(--white); border: var(--border); }
-  .ico svg { width: 26px; height: 26px; }
-
-  /* Banda oscura del cliente */
   .band { background: var(--brown); color: var(--white); border-block: var(--border); }
   .band h2 { text-shadow: 4px 4px 0 var(--red); }
-  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
-  .stack { display: grid; gap: 18px; }
-  .stack .shot:nth-child(2) { transform: rotate(-1.5deg) translateX(30px); margin-top: -40px; width: 82%; justify-self: end; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 26px; }
-  .chip { padding: 7px 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.25); font-weight: 800; font-size: 14px; }
+
+  /* Lista de funciones (filas alternas) */
+  .feature { display: grid; grid-template-columns: 1fr 1.15fr; gap: 44px; align-items: center; padding: 34px 0; }
+  .feature > * { min-width: 0; }
+  .feature:nth-child(even) .f-media { order: -1; }
+  .feature h3 { font-family: var(--display); font-size: clamp(24px, 3vw, 34px); margin: 12px 0 10px; color: #fff; text-shadow: 3px 3px 0 var(--brown); }
+  .band .feature h3 { text-shadow: 3px 3px 0 var(--red); }
+  .feature p { color: #fff; font-size: 17px; line-height: 1.6; margin: 0 0 16px; }
+  .num { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: var(--yellow); color: var(--brown); font-family: var(--display); font-size: 18px; border: var(--border); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { padding: 7px 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); border: 2px solid rgba(255, 255, 255, 0.3); font-weight: 800; font-size: 14px; color: #fff; }
   .chip.y { background: var(--yellow); color: var(--brown); border-color: var(--yellow); }
-  .ticks { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-  .ticks li { display: flex; gap: 10px; line-height: 1.5; }
-  .ticks li::before { content: ""; flex: none; width: 22px; height: 22px; margin-top: 2px; border-radius: 7px; background: var(--yellow)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233A1A10' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/16px no-repeat; }
+  .f-media .shot { transform: rotate(1.2deg); } .feature:nth-child(even) .f-media .shot { transform: rotate(-1.2deg); }
 
-  /* Cosméticos */
-  .cos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .cos figure { margin: 0; }
-  .cos figcaption { margin-top: 12px; color: var(--white); font-weight: 800; text-align: center; text-shadow: 2px 2px 0 var(--brown); }
-  .prices { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-  .price { display: flex; align-items: center; gap: 10px; background: var(--cream); border: var(--border); border-radius: 16px; box-shadow: var(--sticker-sm); padding: 12px 16px; font-weight: 800; }
-  .kc { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font: 14px var(--display); color: var(--brown);
-    background: radial-gradient(circle at 35% 30%, #fff2b0, var(--yellow) 55%, #d99a12); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.25); }
-  .price small { color: var(--muted); font-weight: 700; }
-
-  /* Galería */
   .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  .gallery .shot:hover { transform: scale(1.02) rotate(-0.5deg); }
-  .gallery .shot { transition: transform 0.2s; }
-
-  /* Descarga */
+  .gallery > * { min-width: 0; }
+  .card { background: var(--cream); border: var(--border); border-radius: 22px; box-shadow: var(--sticker); padding: 24px; }
   .download { text-align: center; }
   .download .card { max-width: 760px; margin: 0 auto; padding: 40px 28px; }
   .download h2 { color: var(--brown); text-shadow: 4px 4px 0 var(--yellow); margin-top: 0; }
   .download p { color: var(--muted); font-size: 17px; }
   .req { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; font-weight: 700; font-size: 14px; }
   .req span { background: #fde7c8; border-radius: 999px; padding: 6px 12px; }
-
-  /* FAQ */
   .faq { max-width: 820px; margin: 0 auto; display: grid; gap: 12px; }
   details { background: var(--cream); border: var(--border); border-radius: 18px; box-shadow: var(--sticker-sm); padding: 16px 20px; }
   summary { cursor: pointer; font-weight: 800; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
@@ -135,69 +150,178 @@
   summary::after { content: "+"; font-family: var(--display); color: var(--red); }
   details[open] summary::after { content: "–"; }
   details p { color: var(--muted); line-height: 1.6; margin: 12px 0 0; }
+  .news { display: grid; gap: 14px; max-width: 820px; }
+  .news article { background: var(--cream); border: var(--border); border-radius: 18px; box-shadow: var(--sticker-sm); padding: 16px 20px; }
+  .news h4 { margin: 0 0 4px; font-family: var(--display); font-size: 18px; } .news time { color: var(--muted); font-weight: 700; font-size: 13px; }
+  .news ul { margin: 8px 0 0; padding-left: 20px; color: var(--muted); line-height: 1.55; }
+
+  /* ---------- Páginas Skins / Capas / Tienda ---------- */
+  .page-head { padding: 46px 0 8px; color: #fff; }
+  .page-head h2 { margin-top: 12px; }
+  .page { padding: 10px 0 70px; }
+  .shop { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+  .fitting { position: sticky; top: 88px; background: var(--brown); border: var(--border); border-radius: 22px; box-shadow: var(--sticker); padding: 14px; color: #fff; }
+  .fitting h4 { margin: 2px 4px 10px; font-family: var(--display); font-size: 17px; display: flex; justify-content: space-between; align-items: center; }
+  .viewer { height: 400px; border-radius: 14px; overflow: hidden; background: radial-gradient(circle at 50% 35%, #6b3a28, #2a130c); position: relative; }
+  .viewer canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+  .viewer .wait { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; color: rgba(255, 255, 255, 0.7); pointer-events: none; }
+  .namebox { display: flex; gap: 8px; margin-top: 12px; }
+  .namebox input { flex: 1; min-width: 0; height: 44px; border-radius: 12px; border: 3px solid var(--brown-2); background: var(--cream); color: var(--ink); font: 800 15px var(--body); padding: 0 12px; }
+  .worn { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; min-height: 30px; }
+  .worn button { border: 0; cursor: pointer; background: rgba(255, 255, 255, 0.14); color: #fff; border-radius: 999px; padding: 5px 10px; font-weight: 800; font-size: 12px; }
+  .worn button::after { content: " ×"; color: var(--yellow); }
+  .hint { font-size: 13px; color: rgba(255, 255, 255, 0.8); margin: 10px 4px 2px; line-height: 1.45; }
+  .hint.dark { color: var(--muted); }
+
+  .wallet { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; background: var(--cream); border: var(--border); border-radius: 20px; box-shadow: var(--sticker-sm); padding: 14px 18px; margin-bottom: 18px; }
+  .wallet p { margin: 0; flex: 1; min-width: 220px; color: var(--muted); font-weight: 700; line-height: 1.45; } .wallet p b { color: var(--ink); }
+  .kc { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font: 12px var(--display); color: var(--brown); flex: none;
+    background: radial-gradient(circle at 35% 30%, #fff2b0, var(--yellow) 55%, #d99a12); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.25); }
+  .kc.big { width: 44px; height: 44px; font-size: 22px; }
+  .cats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .cats button { border: 3px solid var(--brown); background: var(--cream); border-radius: 999px; padding: 7px 14px; font-weight: 800; font-size: 14px; cursor: pointer; }
+  .cats button.on { background: var(--yellow); box-shadow: 3px 3px 0 var(--brown); }
+  .cats button small { color: var(--muted); margin-left: 4px; }
+  .row-title { display: flex; align-items: baseline; gap: 10px; margin: 6px 0 12px; color: #fff; }
+  .row-title h3 { font-family: var(--display); font-size: 22px; margin: 0; text-shadow: 3px 3px 0 var(--brown); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-bottom: 30px; }
+  .item { position: relative; display: flex; flex-direction: column; text-align: left; background: var(--cream); border: var(--border); border-radius: 18px; padding: 0; overflow: hidden; cursor: pointer;
+    box-shadow: var(--sticker-sm); transition: transform 0.15s, box-shadow 0.15s; }
+  .item:hover { transform: translate(-2px, -3px); box-shadow: 6px 7px 0 var(--brown); }
+  .item.on { outline: 4px solid var(--yellow); outline-offset: 2px; }
+  .thumb { aspect-ratio: 1; background: radial-gradient(circle at 50% 40%, #4a4f5c, #23262d); display: grid; place-items: center; border-bottom: var(--border); position: relative; }
+  .thumb img { width: 100%; height: 100%; object-fit: contain; }
+  .thumb img[src$=".png"] { width: 62%; height: 62%; image-rendering: pixelated; }
+  .thumb::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--rc, var(--common)); }
+  .r-common { --rc: var(--common); } .r-rare { --rc: var(--rare); } .r-epic { --rc: var(--epic); } .r-legendary { --rc: var(--legendary); } .r-exclusive { --rc: var(--exclusive); }
+  .tag { position: absolute; top: 8px; left: 8px; font-size: 10px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; background: var(--rc); padding: 3px 7px; border-radius: 6px; z-index: 1; }
+  .item .iname { font-weight: 800; font-size: 14px; padding: 9px 10px 2px; line-height: 1.25; }
+  .item .imeta { display: flex; align-items: center; gap: 6px; padding: 0 10px 10px; font-weight: 800; font-size: 13px; color: var(--muted); margin-top: auto; }
+  .empty { color: #fff; font-weight: 800; padding: 20px 0; }
+  .skins { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 24px; align-items: start; }
+  .skins .viewer { height: 480px; }
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: var(--brown); color: #fff; border: 3px solid var(--yellow); border-radius: 999px; padding: 12px 20px;
+    font-weight: 800; z-index: 60; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); max-width: calc(100% - 32px); text-align: center; }
+
+  dialog { border: var(--border); border-radius: 22px; box-shadow: var(--sticker); background: var(--cream); color: var(--ink); padding: 28px; max-width: min(460px, calc(100% - 32px)); text-align: center; }
+  dialog::backdrop { background: rgba(58, 26, 16, 0.6); }
+  dialog h3 { font-family: var(--display); font-size: 22px; margin: 10px 0 8px; }
+  dialog p { color: var(--muted); line-height: 1.55; margin: 0 0 18px; }
+  dialog .path { display: inline-block; background: #fde7c8; border-radius: 10px; padding: 6px 12px; font-weight: 800; margin-bottom: 18px; }
+  dialog .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
   footer { background: var(--brown); color: rgba(255, 255, 255, 0.8); padding: 34px 0; font-size: 14px; border-top: var(--border); }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; }
-
+  footer a { font-weight: 800; }
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
   .reveal.in { opacity: 1; transform: none; }
 
-  /* Las capturas grandes no deben ensanchar la rejilla en pantallas pequeñas */
-  .hero .wrap > *, .split > *, .cards > *, .cos > *, .gallery > * { min-width: 0; }
+  @media (max-width: 1080px) {
+    .burger { display: block; }
+    .links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--brown); border-bottom: var(--border); flex-direction: column; align-items: stretch; padding: 10px 16px 16px; gap: 4px; }
+    nav.open .links { display: flex; }
+    .links > a, .drop > button { justify-content: flex-start; width: 100%; }
+    .drop .menu { position: static; box-shadow: none; margin-top: 6px; }
+    .acct .menu { position: absolute; }
+    .acct > button span { display: none; }
+    .acct > button { padding: 4px; }
+  }
   @media (max-width: 900px) {
-    .hero .wrap, .split { grid-template-columns: minmax(0, 1fr); }
-    .cards, .cos, .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .links { display: none; }
-    .lang { margin-left: auto; }
-    .stage { min-height: 0; margin-top: 10px; }
-    .mascot { width: 34%; left: -4%; bottom: -24px; }
+    .feature { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 24px 0; }
+    .feature .f-media { order: 2 !important; }
+    .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .shop, .skins { grid-template-columns: minmax(0, 1fr); }
+    .fitting { position: static; order: -1; }
+    .viewer, .skins .viewer { height: 320px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 560px) {
-    .cards, .cos, .gallery { grid-template-columns: minmax(0, 1fr); }
+    .gallery { grid-template-columns: minmax(0, 1fr); }
     .btn-big { width: 100%; }
-    .stage .shot { transform: none; }
-    .logo small { display: none; }
-    .stack .shot:nth-child(2) { transform: none; margin-top: 0; width: 100%; }
+    .lang button { padding: 6px 7px; }
+    .logo span { display: none; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     section { padding: 52px 0; }
+    .f-media .shot { transform: none !important; }
   }
 </style>
 </head>
 <body>
 <div class="pattern" aria-hidden="true"></div>
 
-<nav>
+<nav id="nav">
   <div class="wrap">
-    <a class="logo" href="#"><img src="img/icon.png" alt="">KIRMC<small>キルエム</small></a>
-    <div class="links">
-      <a href="#funciones" data-t="nav.features">Funciones</a>
-      <a href="#cliente" data-t="nav.client">KIRMC Client</a>
-      <a href="#cosmeticos" data-t="nav.cosmetics">Cosméticos</a>
-      <a href="#descargar" data-t="nav.download">Descargar</a>
+    <a class="logo" href="#/"><img src="img/icon.png" alt="KIRMC"><span>KIRMC</span></a>
+    <button class="burger" id="burger" aria-label="Menú" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="links" id="links">
+      <a href="#/" data-nav="home"><span data-t="nav.client">Client</span> <span class="new" data-t="new">NUEVO</span></a>
+      <a href="#/skins" data-nav="skins">Skins</a>
+      <a href="#/capas" data-nav="capas" data-t="nav.capes">Capas</a>
+      <a href="#/tienda" data-nav="tienda"><span data-t="nav.shop">Tienda</span> <span class="new" data-t="new">NUEVO</span></a>
+      <div class="drop" id="explore">
+        <button aria-haspopup="true" aria-expanded="false"><span data-t="nav.explore">Explorar</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="menu">
+          <a href="#funciones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg><span data-t="ex.features">Funciones</span></a>
+          <a href="#/tienda?cat=gesture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="5" r="2.2"/><path d="M5 9l7 2 7-2M12 11v5l-3 5M12 16l3 5"/></svg><span data-t="ex.emotes">Emotes y bailes</span></a>
+          <a href="#galeria"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg><span data-t="ex.shots">Capturas</span></a>
+          <a href="#novedades"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h12v14H6a2 2 0 0 1-2-2zM16 9h4v8a2 2 0 0 1-2 2M8 9h4M8 13h4"/></svg><span data-t="ex.news">Novedades</span></a>
+          <a href="#faq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h.01"/></svg><span data-t="ex.faq">Preguntas frecuentes</span></a>
+          <hr>
+          <a href="#descargar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-t="ex.download">Descargar</span></a>
+          <a href="https://github.com/kirpulrbx-max/KIRMC-Launcher" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l-6-6 6-6M15 6l6 6-6 6"/></svg>GitHub</a>
+        </div>
+      </div>
+    </div>
+    <div class="search" id="search" role="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="Buscar jugadores, skins o cosméticos…" data-tp="search.ph" aria-label="Buscar">
+      <div class="results" id="results" hidden></div>
     </div>
     <div class="lang" role="group" aria-label="Idioma">
       <button data-lang="es" class="on">ES</button><button data-lang="en">EN</button><button data-lang="ja">日本</button>
     </div>
+    <div class="drop acct" id="acct">
+      <button aria-haspopup="true" aria-expanded="false" aria-label="Cuenta"><img src="img/icon.png" alt=""><span data-t="acct.guest">Invitado</span></button>
+      <div class="menu right">
+        <div class="who"><img src="img/icon.png" alt=""><div><b data-t="acct.guest">Invitado</b><small data-t="acct.sub">Tu cuenta KIRMC vive en el launcher</small></div></div>
+        <hr>
+        <button data-acct="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span data-t="acct.profile">Ver perfil</span></button>
+        <button data-acct="chat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg><span data-t="acct.chat">Chat</span></button>
+        <button data-acct="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/></svg><span data-t="acct.dash">Panel</span></button>
+        <button data-acct="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4v16M10 4v16M14 5l5 14"/></svg><span data-t="acct.library">Mi biblioteca</span></button>
+        <button data-acct="notif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></svg><span data-t="acct.notif">Notificaciones</span></button>
+        <button data-acct="account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span data-t="acct.account">Cuenta</span></button>
+        <hr>
+        <button data-acct="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span data-t="acct.add">Añadir cuenta</span></button>
+      </div>
+    </div>
   </div>
 </nav>
 
+<!-- ================= Client (portada) ================= -->
+<main data-view="home">
 <header class="hero">
   <div class="wrap">
-    <div>
-      <span class="badge"><i></i><span class="js-version">v0.9.0</span> · Windows</span>
-      <h1>KIRMC<span>LAUNCHER</span></h1>
-      <p class="lead" data-t="hero.lead">El launcher de Minecraft con alma de oni: instancias en un clic, mods de Modrinth, cosméticos 3D, amigos, chat y tu propio cliente con módulos.</p>
-      <div class="cta">
-        <a class="btn btn-yellow btn-big js-download" href="https://github.com/kirpulrbx-max/KIRMC-Launcher/releases/latest/download/KIRMC-Launcher-Setup.exe">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
-          <span data-t="hero.download">Descargar gratis</span>
-        </a>
-        <a class="btn btn-cream" href="#funciones" data-t="hero.more">Ver funciones</a>
-      </div>
-      <p class="meta"><span data-t="hero.meta">Gratis · Windows 10/11 · se actualiza solo</span> · <span class="js-size">6,7 MB</span></p>
+    <span class="badge"><i></i><span class="js-version">v1.6.0</span> · Windows · Minecraft 26.1 – 26.3</span>
+    <h1><span data-t="hero.t1">Un launcher.</span><em data-t="hero.t2">Todo tu Minecraft.</em></h1>
+    <p class="lead" data-t="hero.lead">KIRMC junta tus instancias, tus mods y un cliente propio con módulos, cosméticos 3D, emotes, amigos y chat. Rápido, bonito y con alma de oni.</p>
+    <div class="cta">
+      <a class="btn btn-yellow btn-big js-download" href="https://github.com/kirpulrbx-max/KIRMC-Launcher/releases/latest/download/KIRMC-Launcher-Setup.exe">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+        <span data-t="hero.download">Descargar gratis</span>
+      </a>
+      <a class="btn btn-cream" href="#/tienda" data-t="hero.shop">Ver la tienda</a>
+    </div>
+    <p class="meta"><span data-t="hero.meta">Gratis · Windows 10/11 · se actualiza solo</span> · <span class="js-size">7 MB</span></p>
+    <div class="stats">
+      <div class="stat"><b id="st-cos">185</b><span data-t="st.cos">Cosméticos 3D</span></div>
+      <div class="stat"><b>22</b><span data-t="st.emotes">Emotes y bailes</span></div>
+      <div class="stat"><b>12</b><span data-t="st.mods">Módulos de HUD</span></div>
+      <div class="stat"><b>3</b><span data-t="st.vers">Versiones de Minecraft</span></div>
     </div>
     <div class="stage">
       <div class="shot"><img src="img/launcher-play.jpg" alt="Pantalla Jugar de KIRMC Launcher" width="1240" height="760"></div>
-      <div class="steam" aria-hidden="true"><span></span><span></span><span></span></div>
       <img class="mascot" src="img/mascot.png" alt="Mascota de KIRMC: un oni rojo comiendo ramen" width="437" height="512">
     </div>
   </div>
@@ -205,83 +329,82 @@
 
 <section id="funciones">
   <div class="wrap">
-    <span class="eyebrow" data-t="feat.eyebrow">Todo en uno</span>
-    <h2 data-t="feat.title">Listo para jugar</h2>
-    <p class="sub" data-t="feat.sub">Todo lo que necesitas para jugar Minecraft, en un programa rápido y bonito.</p>
-    <div class="cards">
-      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 8l10 5 10-5zM2 13l10 5 10-5M2 17.5l10 5 10-5"/></svg></div>
-        <h3 data-t="f1.t">Instancias en un clic</h3><p data-t="f1.d">Vanilla, Forge, Fabric y Quilt. Cada instancia con sus mods, mundos y ajustes, y Java automático.</p></div>
-      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 3 7.5v9L12 21l9-4.5v-9zM3 7.5l9 4.5 9-4.5M12 12v9"/></svg></div>
-        <h3 data-t="f2.t">Modrinth integrado</h3><p data-t="f2.d">Busca e instala mods, shaders, resource packs y modpacks completos, con sus portadas reales.</p></div>
-      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/></svg></div>
-        <h3 data-t="f3.t">Premium y no-premium</h3><p data-t="f3.d">Inicia sesión con Microsoft o juega sin cuenta, con skins y capas que sí se ven (skinfix).</p></div>
-      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></div>
-        <h3 data-t="f4.t">Cosméticos 3D</h3><p data-t="f4.d">25 cosméticos originales de temática japonesa que se ven dentro del juego.</p></div>
-      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg></div>
-        <h3 data-t="f5.t">Amigos y chat</h3><p data-t="f5.d">Agrega amigos, mira quién está jugando y chatea en tiempo real, con notificaciones.</p></div>
-      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg></div>
-        <h3 data-t="f6.t">Siempre al día</h3><p data-t="f6.d">Cuando sale una versión nueva, KIRMC te avisa y se actualiza solo con un clic.</p></div>
+    <span class="eyebrow" data-t="feat.eyebrow">Funciones</span>
+    <h2 data-t="feat.title">Todo lo que trae KIRMC</h2>
+    <div class="feature reveal">
+      <div><span class="num">01</span><h3 data-t="f1.t">Módulos de HUD a tu manera</h3>
+        <p data-t="f1.d">Pulsa Shift derecho dentro del juego, arrastra cada módulo donde quieras y cámbiale el tamaño. Cuatro estilos y seis colores; todo se guarda solo.</p>
+        <div class="chips"><span class="chip y" data-t="m.coords">Coordenadas</span><span class="chip">FPS</span><span class="chip">Ping</span><span class="chip">CPS</span><span class="chip">Keystrokes</span>
+          <span class="chip" data-t="m.armor">Armadura</span><span class="chip" data-t="m.effects">Efectos</span><span class="chip y" data-t="m.minimap">Minimapa</span><span class="chip y">Spotify</span><span class="chip">Zoom</span><span class="chip">Fullbright</span><span class="chip" data-t="m.clock">Reloj</span></div></div>
+      <div class="f-media"><div class="shot"><img src="img/game-menu.jpg" alt="Menú KIRMC con módulos arrastrables" loading="lazy" width="854" height="480"></div></div>
+    </div>
+    <div class="feature reveal">
+      <div><span class="num">02</span><h3 data-t="f2.t">Cosméticos 3D que ven los demás</h3>
+        <p data-t="f2.d">Sombreros, pelo, ropa con mangas, alas, auras, mascotas, herramientas a la espalda y un Mini Yo con tu skin. Los jugadores con KIRMC los ven dentro del juego.</p>
+        <a class="btn btn-yellow btn-sm" href="#/tienda" data-t="f2.cta">Probar en la tienda</a></div>
+      <div class="f-media"><div class="shot"><img src="img/cos-wings.jpg" alt="Cosméticos KIRMC dentro del juego" loading="lazy" width="854" height="480"></div></div>
+    </div>
+    <div class="feature reveal">
+      <div><span class="num">03</span><h3 data-t="f3.t">Emotes y bailes</h3>
+        <p data-t="f3.d">Mantén la tecla B para abrir la rueda de emotes: saluda, siéntate o baila. Hay 22, con páginas que se cambian con la rueda del ratón.</p>
+        <a class="btn btn-cream btn-sm" href="#/tienda?cat=gesture" data-t="f3.cta">Ver los emotes</a></div>
+      <div class="f-media"><div class="shot"><img src="img/cos-oni.jpg" alt="Jugador con cosméticos de oni" loading="lazy" width="854" height="480"></div></div>
     </div>
   </div>
 </section>
 
-<section id="cliente" class="band">
-  <div class="wrap split">
-    <div class="stack reveal">
-      <div class="shot"><img src="img/game-title.jpg" alt="Menú principal de Minecraft con ft. KIRMC" loading="lazy" width="854" height="480"></div>
-      <div class="shot"><img src="img/game-menu.jpg" alt="Menú KIRMC con módulos arrastrables" loading="lazy" width="854" height="480"></div>
-    </div>
-    <div>
-      <span class="eyebrow" style="background:var(--red);color:#fff">Minecraft 26.1 · 26.2 · 26.3</span>
-      <h2>KIRMC Client</h2>
-      <p class="sub" data-t="client.sub">Una instancia propia con el menú «Minecraft ft. KIRMC». Pulsa Shift derecho y coloca cada módulo donde quieras.</p>
-      <div class="chips">
-        <span class="chip y" data-t="m.coords">Coordenadas</span><span class="chip">FPS</span><span class="chip">Ping</span><span class="chip">CPS</span>
-        <span class="chip">Keystrokes</span><span class="chip" data-t="m.armor">Armadura</span><span class="chip" data-t="m.effects">Efectos</span>
-        <span class="chip y" data-t="m.minimap">Minimapa</span><span class="chip y">Spotify</span><span class="chip">Zoom</span><span class="chip">Fullbright</span><span class="chip" data-t="m.clock">Reloj</span>
-      </div>
-      <ul class="ticks">
-        <li data-t="client.t1">Arrastra y cambia el tamaño de cada módulo; se guarda solo.</li>
-        <li data-t="client.t2">4 estilos (KIRMC, Cristal, Sólido, Mínimo) y 6 colores.</li>
-        <li data-t="client.t3">El icono del oni aparece junto al nombre de los jugadores con KIRMC.</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section id="cosmeticos">
+<section class="band">
   <div class="wrap">
-    <span class="eyebrow" data-t="cos.eyebrow">Tienda</span>
-    <h2 data-t="cos.title">Cosméticos con K coins</h2>
-    <p class="sub" data-t="cos.sub">Cuernos de oni, kabuto, alas, katanas, colas de kitsune… Gana 10 K coins cada día y cómpralos en el launcher. Los demás jugadores con KIRMC los ven en el juego.</p>
-    <div class="cos">
-      <figure class="reveal"><div class="shot"><img src="img/cos-oni.jpg" alt="Cuernos de oni y katana" loading="lazy" width="854" height="480"></div><figcaption data-t="cos.c1">Cuernos de Oni + Katana</figcaption></figure>
-      <figure class="reveal"><div class="shot"><img src="img/cos-kabuto.jpg" alt="Kabuto del shōgun y máscara kitsune" loading="lazy" width="854" height="480"></div><figcaption data-t="cos.c2">Kabuto + Máscara Kitsune</figcaption></figure>
-      <figure class="reveal"><div class="shot"><img src="img/cos-wings.jpg" alt="Alas de oni y gorro ramen" loading="lazy" width="854" height="480"></div><figcaption data-t="cos.c3">Alas de Oni + Gorro Ramen</figcaption></figure>
+    <div class="feature reveal">
+      <div><span class="num">04</span><h3 data-t="f4.t">Instancias en un clic</h3>
+        <p data-t="f4.d">Vanilla, Forge, Fabric y Quilt, cada una con sus mods, mundos y ajustes. Java se instala solo y los modpacks muestran su propia portada.</p></div>
+      <div class="f-media"><div class="shot"><img src="img/launcher-instances.jpg" alt="Instancias de KIRMC Launcher" loading="lazy" width="1240" height="760"></div></div>
     </div>
-    <div class="prices">
-      <div class="price"><span class="kc">K</span> 10 <small data-t="cos.daily">al día</small></div>
-      <div class="price"><span data-t="r.common">Común</span> <span class="kc">K</span> 70</div>
-      <div class="price"><span data-t="r.rare">Raro</span> <span class="kc">K</span> 220</div>
-      <div class="price"><span data-t="r.epic">Épico</span> <span class="kc">K</span> 480</div>
-      <div class="price"><span data-t="r.legendary">Legendario</span> <span class="kc">K</span> 1.200</div>
+    <div class="feature reveal">
+      <div><span class="num">05</span><h3 data-t="f5.t">Modrinth integrado</h3>
+        <p data-t="f5.d">Busca e instala mods, shaders, resource packs y modpacks completos sin salir del launcher.</p></div>
+      <div class="f-media"><div class="shot"><img src="img/theme-mc.jpg" alt="Tema Minecraft del launcher" loading="lazy" width="1240" height="760"></div></div>
+    </div>
+    <div class="feature reveal">
+      <div><span class="num">06</span><h3 data-t="f6.t">Amigos y chat</h3>
+        <p data-t="f6.d">Agrega amigos, mira quién está jugando y chatea en tiempo real con notificaciones. El icono del oni marca a quien usa KIRMC.</p></div>
+      <div class="f-media"><div class="shot"><img src="img/launcher-chat.jpg" alt="Chat con amigos" loading="lazy" width="1240" height="760"></div></div>
+    </div>
+    <div class="feature reveal">
+      <div><span class="num">07</span><h3 data-t="f7.t">Skins y capas que sí se ven</h3>
+        <p data-t="f7.d">Cuenta de Microsoft o modo no-premium, con skins y capas visibles. Las capas KIRMC también funcionan como élitros.</p>
+        <a class="btn btn-yellow btn-sm" href="#/capas" data-t="f7.cta">Ver las capas</a></div>
+      <div class="f-media"><div class="shot"><img src="img/game-nametag.jpg" alt="Nombre de jugador con el icono de KIRMC" loading="lazy" width="854" height="480"></div></div>
+    </div>
+    <div class="feature reveal">
+      <div><span class="num">08</span><h3 data-t="f8.t">Cuatro temas, tres idiomas</h3>
+        <p data-t="f8.d">Temas KIRMC, Oscuro y Minecraft, animaciones suaves y sonidos del juego. En español, inglés y japonés, y se actualiza solo.</p></div>
+      <div class="f-media"><div class="shot"><img src="img/theme-dark.jpg" alt="Tema oscuro" loading="lazy" width="1240" height="760"></div></div>
     </div>
   </div>
 </section>
 
-<section id="galeria" class="band">
+<section id="galeria">
   <div class="wrap">
-    <span class="eyebrow" style="background:var(--red);color:#fff" data-t="gal.eyebrow">Capturas</span>
+    <span class="eyebrow" data-t="gal.eyebrow">Capturas</span>
     <h2 data-t="gal.title">Hecho para verse bien</h2>
-    <p class="sub" data-t="gal.sub">Cuatro temas, animaciones suaves y sonidos de Minecraft. En español, inglés y japonés.</p>
     <div class="gallery">
-      <div class="shot reveal"><img src="img/launcher-shop.jpg" alt="Tienda de cosméticos" loading="lazy" width="1240" height="760"></div>
-      <div class="shot reveal"><img src="img/launcher-chat.jpg" alt="Chat con amigos" loading="lazy" width="1240" height="760"></div>
-      <div class="shot reveal"><img src="img/launcher-instances.jpg" alt="Instancias" loading="lazy" width="1240" height="760"></div>
-      <div class="shot reveal"><img src="img/theme-dark.jpg" alt="Tema oscuro" loading="lazy" width="1240" height="760"></div>
-      <div class="shot reveal"><img src="img/theme-mc.jpg" alt="Tema Minecraft" loading="lazy" width="1240" height="760"></div>
+      <div class="shot reveal"><img src="img/game-title.jpg" alt="Menú principal ft. KIRMC" loading="lazy" width="854" height="480"></div>
+      <div class="shot reveal"><img src="img/game-hud.jpg" alt="HUD de KIRMC Client" loading="lazy" width="854" height="480"></div>
       <div class="shot reveal"><img src="img/game-hud-glass.jpg" alt="HUD estilo Cristal" loading="lazy" width="854" height="480"></div>
+      <div class="shot reveal"><img src="img/cos-kabuto.jpg" alt="Kabuto y máscara kitsune" loading="lazy" width="854" height="480"></div>
+      <div class="shot reveal"><img src="img/launcher-shop.jpg" alt="Tienda del launcher" loading="lazy" width="1240" height="760"></div>
+      <div class="shot reveal"><img src="img/launcher-play.jpg" alt="Pantalla Jugar" loading="lazy" width="1240" height="760"></div>
     </div>
+  </div>
+</section>
+
+<section id="novedades" class="band">
+  <div class="wrap">
+    <span class="eyebrow" style="background:var(--red);color:#fff" data-t="news.eyebrow">Novedades</span>
+    <h2 data-t="news.title">Últimas versiones</h2>
+    <div class="news" id="news"><p class="hint" data-t="news.loading">Cargando novedades…</p></div>
+    <p style="margin-top:18px"><a href="https://github.com/kirpulrbx-max/KIRMC-Launcher/releases" rel="noopener" style="font-weight:800" data-t="dl.all">Todas las versiones y novedades</a></p>
   </div>
 </section>
 
@@ -293,10 +416,9 @@
       <p data-t="dl.sub">Descarga KIRMC Launcher, crea tu primera instancia y a jugar.</p>
       <a class="btn btn-yellow btn-big js-download" href="https://github.com/kirpulrbx-max/KIRMC-Launcher/releases/latest/download/KIRMC-Launcher-Setup.exe">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
-        <span><span data-t="dl.btn">Descargar</span> <span class="js-version">v0.9.0</span></span>
+        <span><span data-t="dl.btn">Descargar</span> <span class="js-version">v1.6.0</span></span>
       </a>
       <div class="req"><span>Windows 10 / 11 · 64 bits</span><span data-t="dl.java">Java incluido automáticamente</span><span class="js-date"></span></div>
-      <p style="font-size:14px;margin-top:18px"><a href="https://github.com/kirpulrbx-max/KIRMC-Launcher/releases" data-t="dl.all">Todas las versiones y novedades</a></p>
     </div>
   </div>
 </section>
@@ -305,112 +427,449 @@
   <div class="wrap">
     <h2 style="text-align:center" data-t="faq.title">Preguntas frecuentes</h2>
     <div class="faq">
-      <details><summary data-t="q1">¿Es gratis?</summary><p data-t="a1">Sí. KIRMC Launcher es gratis. Las K coins se ganan jugando cada día.</p></details>
+      <details><summary data-t="q1">¿Es gratis?</summary><p data-t="a1">Sí. KIRMC Launcher es gratis. Las K coins se ganan cada día y, si quieres, también se pueden recargar.</p></details>
       <details><summary data-t="q2">Windows dice que el archivo no es común, ¿es seguro?</summary><p data-t="a2">Es normal en programas nuevos sin firma de Microsoft. Pulsa «Más información» y «Ejecutar de todas formas». El código está en GitHub.</p></details>
       <details><summary data-t="q3">¿Necesito Minecraft original?</summary><p data-t="a3">Puedes entrar con tu cuenta de Microsoft (premium) o jugar en modo no-premium. Para amigos, chat y K coins necesitas una cuenta KIRMC gratuita.</p></details>
-      <details><summary data-t="q4">¿Cómo se actualiza?</summary><p data-t="a4">Solo. Cuando hay una versión nueva, el launcher muestra un aviso con el botón «Actualizar».</p></details>
+      <details><summary data-t="q4">¿Dónde compro y equipo los cosméticos?</summary><p data-t="a4">En el launcher: Personajes → Tienda. En esta web puedes verlos y probártelos sobre tu skin.</p></details>
+      <details><summary data-t="q5">Soy nuevo, ¿hay algún regalo?</summary><p data-t="a5">Sí: las cuentas con menos de 30 días pueden canjear el código BIENVENIDO-KIRMC en Ajustes → Código promocional y llevarse la Capa de Bienvenida.</p></details>
     </div>
   </div>
 </section>
+</main>
+
+<!-- ================= Skins ================= -->
+<main data-view="skins" hidden>
+  <div class="page-head"><div class="wrap">
+    <span class="eyebrow">Skins</span>
+    <h2 data-t="sk.title">Mira cualquier skin en 3D</h2>
+    <p class="sub" data-t="sk.sub">Escribe un nombre de Minecraft para ver su skin, y pruébale capas y cosméticos de KIRMC.</p>
+  </div></div>
+  <div class="page"><div class="wrap skins">
+    <div class="fitting" data-fitting></div>
+    <div>
+      <div class="row-title"><h3 data-t="sk.capes">Pruébale una capa</h3></div>
+      <div class="grid" id="skin-capes"></div>
+      <div class="row-title"><h3 data-t="sk.popular">Cosméticos populares</h3></div>
+      <div class="grid" id="skin-cos"></div>
+      <a class="btn btn-yellow" href="#/tienda" data-t="sk.all">Ver toda la tienda</a>
+    </div>
+  </div></div>
+</main>
+
+<!-- ================= Capas ================= -->
+<main data-view="capas" hidden>
+  <div class="page-head"><div class="wrap">
+    <span class="eyebrow" data-t="nav.capes">Capas</span>
+    <h2 data-t="cp.title">Capas KIRMC</h2>
+    <p class="sub" data-t="cp.sub">Dibujadas en alta resolución, varias animadas, y todas sirven también como élitros. Toca una para probártela.</p>
+  </div></div>
+  <div class="page"><div class="wrap shop">
+    <div>
+      <div class="wallet"><span class="kc big">K</span><p><b data-t="cp.gift">¿Cuenta nueva?</b> <span data-t="cp.giftd">Canjea BIENVENIDO-KIRMC en el launcher (Ajustes → Código promocional) y llévate la Capa de Bienvenida.</span></p></div>
+      <div class="grid" id="capes-grid"></div>
+    </div>
+    <div class="fitting" data-fitting></div>
+  </div></div>
+</main>
+
+<!-- ================= Tienda ================= -->
+<main data-view="tienda" hidden>
+  <div class="page-head"><div class="wrap">
+    <span class="eyebrow" data-t="nav.shop">Tienda</span>
+    <h2 data-t="sh.title">Cosméticos y emotes</h2>
+    <p class="sub" data-t="sh.sub">El catálogo completo del launcher. Toca cualquier cosa para probártela sobre tu skin.</p>
+  </div></div>
+  <div class="page"><div class="wrap shop">
+    <div>
+      <div class="wallet"><span class="kc big">K</span>
+        <p><b>K coins</b> — <span data-t="sh.coins">Ganas 10 cada día en el launcher y puedes recargar más. Las compras se hacen en el launcher: Personajes → Tienda.</span></p>
+        <a class="btn btn-yellow btn-sm js-download" href="https://github.com/kirpulrbx-max/KIRMC-Launcher/releases/latest/download/KIRMC-Launcher-Setup.exe" data-t="sh.get">Descargar launcher</a></div>
+      <div class="cats" id="cats"></div>
+      <div id="shop-rows"></div>
+    </div>
+    <div class="fitting" data-fitting></div>
+  </div></div>
+</main>
 
 <footer>
   <div class="wrap">
-    <span><strong>KIRMC</strong> キルエム · <span class="js-year"></span></span>
+    <span><strong>KIRMC</strong> キルエム · <span class="js-year"></span> · <a href="https://github.com/kirpulrbx-max/KIRMC-Launcher" rel="noopener">GitHub</a></span>
     <span data-t="foot.legal">KIRMC no está afiliado a Mojang ni a Microsoft. Minecraft es una marca de Mojang AB.</span>
   </div>
 </footer>
 
+<dialog id="dlg">
+  <img src="img/mascot.png" alt="" width="90" height="105" style="width:90px;margin:0 auto">
+  <h3 id="dlg-t"></h3>
+  <p id="dlg-d"></p>
+  <span class="path" id="dlg-p"></span>
+  <div class="row">
+    <a class="btn btn-yellow btn-sm js-download" href="https://github.com/kirpulrbx-max/KIRMC-Launcher/releases/latest/download/KIRMC-Launcher-Setup.exe" data-t="sh.get">Descargar launcher</a>
+    <button class="btn btn-cream btn-sm" id="dlg-x" data-t="close">Cerrar</button>
+  </div>
+</dialog>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<template id="fitting-tpl">
+  <h4><span data-t="fit.title">Probador</span><button class="btn btn-cream btn-sm" data-clear data-t="fit.clear">Quitar todo</button></h4>
+  <div class="viewer"><canvas></canvas><div class="wait" data-t="fit.loading">Cargando 3D…</div></div>
+  <form class="namebox"><input name="n" maxlength="16" placeholder="Nombre de Minecraft" data-tp="fit.ph" aria-label="Nombre de Minecraft" autocomplete="off"><button class="btn btn-yellow btn-sm" data-t="fit.see">Ver</button></form>
+  <div class="worn"></div>
+  <p class="hint" data-t="fit.hint">Arrastra para girar. Los cosméticos se compran y equipan en el launcher.</p>
+</template>
+
 <script>
-  // Textos en inglés y japonés (el español está en el HTML)
+  // ---------- Idiomas (el español está en el HTML; aquí los textos dinámicos y las traducciones) ----------
+  const ES_DYN = {
+    "cat.all": "Todo", "slot.head": "Cabeza", "slot.hair": "Pelo", "slot.face": "Cara", "slot.neck": "Cuello", "slot.body": "Ropa", "slot.back": "Espalda", "slot.tool": "Herramientas",
+    "slot.wings": "Alas", "slot.cape": "Capas", "slot.aura": "Auras", "slot.pet": "Mascotas", "slot.mini": "Mini Yo", "slot.weapon": "Armas", "slot.trail": "Estelas", "slot.gesture": "Emotes",
+    "r.common": "Común", "r.rare": "Raro", "r.epic": "Épico", "r.legendary": "Legendario", "r.exclusive": "Exclusivo",
+    "un.promo": "Con código", "un.invite": "Invitando amigos", "un.pass": "KIRPASS",
+    "row.featured": "Destacados", "row.new": "Novedades", "row.all": "Todo el catálogo",
+    "res.sections": "Secciones", "res.items": "Cosméticos", "res.player": "Jugadores y skins", "res.skin": "Ver la skin de «{n}»", "res.none": "Sin resultados. Prueba con un nombre de Minecraft o de un cosmético.",
+    "toast.game": "«{n}» se usa dentro del juego: mantén B para abrir la rueda de emotes.", "toast.trail": "«{n}» es una estela: se ve al moverte dentro del juego.",
+    "toast.noskin": "No encontré esa skin; se muestra la de Steve.", "toast.no3d": "No se pudo cargar el visor 3D.",
+    "sec.features": "Funciones", "sec.shots": "Capturas", "sec.news": "Novedades", "sec.faq": "Preguntas frecuentes", "sec.download": "Descargar", "sec.shop": "Tienda", "sec.capes": "Capas", "sec.skins": "Skins",
+    "ac.profile.t": "Tu perfil", "ac.profile.d": "Tu perfil KIRMC, con título, marco, insignias y fondo, se ve y se edita en el launcher.", "ac.profile.p": "Launcher → tu avatar → Perfil",
+    "ac.chat.t": "Chat", "ac.chat.d": "Chatea con tus amigos en tiempo real, con notificaciones, desde el launcher.", "ac.chat.p": "Launcher → Amigos → Chat",
+    "ac.dash.t": "Panel", "ac.dash.d": "Tus instancias, tus K coins, la recompensa diaria y el KIRPASS están en la pantalla principal del launcher.", "ac.dash.p": "Launcher → Jugar",
+    "ac.library.t": "Mi biblioteca", "ac.library.d": "Todo lo que has conseguido (cosméticos, capas, emotes) y lo que llevas equipado.", "ac.library.p": "Launcher → Personajes",
+    "ac.notif.t": "Notificaciones", "ac.notif.d": "Solicitudes de amistad, mensajes y avisos de versiones nuevas llegan dentro del launcher.", "ac.notif.p": "Launcher → campana",
+    "ac.account.t": "Cuenta", "ac.account.d": "Cambia tu nombre, idioma, tema y canjea códigos promocionales.", "ac.account.p": "Launcher → Ajustes",
+    "ac.add.t": "Añadir cuenta", "ac.add.d": "Crea tu cuenta KIRMC gratis o añade tu cuenta de Microsoft. Por seguridad, se hace solo desde el launcher.", "ac.add.p": "Launcher → Cuentas → Añadir"
+  };
   const I18N = {
     en: {
-      "nav.features": "Features", "nav.client": "KIRMC Client", "nav.cosmetics": "Cosmetics", "nav.download": "Download",
-      "hero.lead": "The Minecraft launcher with an oni soul: one-click instances, Modrinth mods, 3D cosmetics, friends, chat and your own client with modules.",
-      "hero.download": "Download free", "hero.more": "See features", "hero.meta": "Free · Windows 10/11 · updates itself",
-      "feat.eyebrow": "All in one", "feat.title": "Ready to play", "feat.sub": "Everything you need to play Minecraft, in one fast and pretty app.",
-      "f1.t": "One-click instances", "f1.d": "Vanilla, Forge, Fabric and Quilt. Each instance with its own mods, worlds and settings, plus automatic Java.",
-      "f2.t": "Modrinth built in", "f2.d": "Search and install mods, shaders, resource packs and full modpacks, with their real covers.",
-      "f3.t": "Premium and offline", "f3.d": "Sign in with Microsoft or play offline, with skins and capes that actually show (skinfix).",
-      "f4.t": "3D cosmetics", "f4.d": "25 original Japanese-themed cosmetics that show in game.",
-      "f5.t": "Friends and chat", "f5.d": "Add friends, see who's playing and chat in real time, with notifications.",
-      "f6.t": "Always up to date", "f6.d": "When a new version is out, KIRMC tells you and updates itself in one click.",
-      "client.sub": "Its own instance with the “Minecraft ft. KIRMC” menu. Press Right Shift and place every module wherever you like.",
+      "nav.client": "Client", "new": "NEW", "nav.capes": "Capes", "nav.shop": "Shop", "nav.explore": "Explore", "search.ph": "Search players, skins or cosmetics…",
+      "ex.features": "Features", "ex.emotes": "Emotes and dances", "ex.shots": "Screenshots", "ex.news": "What's new", "ex.faq": "FAQ", "ex.download": "Download",
+      "acct.guest": "Guest", "acct.sub": "Your KIRMC account lives in the launcher", "acct.profile": "View profile", "acct.chat": "Chat", "acct.dash": "Dashboard", "acct.library": "My library",
+      "acct.notif": "Notifications", "acct.account": "Account", "acct.add": "Add account",
+      "hero.t1": "One launcher.", "hero.t2": "All your Minecraft.", "hero.lead": "KIRMC brings together your instances, your mods and its own client with modules, 3D cosmetics, emotes, friends and chat. Fast, pretty and with an oni soul.",
+      "hero.download": "Download free", "hero.shop": "Browse the shop", "hero.meta": "Free · Windows 10/11 · updates itself",
+      "st.cos": "3D cosmetics", "st.emotes": "Emotes and dances", "st.mods": "HUD modules", "st.vers": "Minecraft versions",
+      "feat.eyebrow": "Features", "feat.title": "Everything KIRMC brings",
+      "f1.t": "HUD modules, your way", "f1.d": "Press Right Shift in game, drag every module wherever you like and resize it. Four styles and six colors; everything saves by itself.",
       "m.coords": "Coordinates", "m.armor": "Armor", "m.effects": "Effects", "m.minimap": "Minimap", "m.clock": "Clock",
-      "client.t1": "Drag and resize every module; it saves automatically.", "client.t2": "4 styles (KIRMC, Glass, Solid, Minimal) and 6 colors.",
-      "client.t3": "The oni icon shows next to the name of players using KIRMC.",
-      "cos.eyebrow": "Shop", "cos.title": "Cosmetics with K coins",
-      "cos.sub": "Oni horns, kabuto, wings, katanas, kitsune tails… Earn 10 K coins every day and buy them in the launcher. Other KIRMC players see them in game.",
-      "cos.c1": "Oni Horns + Katana", "cos.c2": "Kabuto + Kitsune Mask", "cos.c3": "Oni Wings + Ramen Hat", "cos.daily": "per day",
-      "r.common": "Common", "r.rare": "Rare", "r.epic": "Epic", "r.legendary": "Legendary",
-      "gal.eyebrow": "Screenshots", "gal.title": "Made to look good", "gal.sub": "Four themes, smooth animations and Minecraft sounds. In Spanish, English and Japanese.",
-      "dl.title": "Ramen time!", "dl.sub": "Download KIRMC Launcher, create your first instance and play.", "dl.btn": "Download",
-      "dl.java": "Java included automatically", "dl.all": "All versions and changelog",
-      "faq.title": "FAQ", "q1": "Is it free?", "a1": "Yes. KIRMC Launcher is free. K coins are earned by playing every day.",
+      "f2.t": "3D cosmetics others can see", "f2.d": "Hats, hair, clothes with sleeves, wings, auras, pets, tools on your back and a Mini Me with your skin. Players using KIRMC see them in game.", "f2.cta": "Try them in the shop",
+      "f3.t": "Emotes and dances", "f3.d": "Hold B to open the emote wheel: wave, sit or dance. There are 22, with pages you flip with the mouse wheel.", "f3.cta": "See the emotes",
+      "f4.t": "One-click instances", "f4.d": "Vanilla, Forge, Fabric and Quilt, each with its own mods, worlds and settings. Java installs itself and modpacks show their own cover.",
+      "f5.t": "Modrinth built in", "f5.d": "Search and install mods, shaders, resource packs and full modpacks without leaving the launcher.",
+      "f6.t": "Friends and chat", "f6.d": "Add friends, see who's playing and chat in real time with notifications. The oni icon marks KIRMC users.",
+      "f7.t": "Skins and capes that actually show", "f7.d": "Microsoft account or offline mode, with visible skins and capes. KIRMC capes also work as elytra.", "f7.cta": "See the capes",
+      "f8.t": "Four themes, three languages", "f8.d": "KIRMC, Dark and Minecraft themes, smooth animations and game sounds. In Spanish, English and Japanese, and it updates itself.",
+      "gal.eyebrow": "Screenshots", "gal.title": "Made to look good", "news.eyebrow": "What's new", "news.title": "Latest versions", "news.loading": "Loading news…",
+      "dl.all": "All versions and changelog", "dl.title": "Ramen time!", "dl.sub": "Download KIRMC Launcher, create your first instance and play.", "dl.btn": "Download", "dl.java": "Java included automatically",
+      "faq.title": "FAQ", "q1": "Is it free?", "a1": "Yes. KIRMC Launcher is free. K coins are earned every day and can also be topped up if you want.",
       "q2": "Windows says the file isn't common. Is it safe?", "a2": "That's normal for new apps without a Microsoft signature. Click “More info” and “Run anyway”. The code is on GitHub.",
       "q3": "Do I need original Minecraft?", "a3": "Sign in with your Microsoft account (premium) or play offline. Friends, chat and K coins need a free KIRMC account.",
-      "q4": "How does it update?", "a4": "By itself. When there's a new version the launcher shows a notice with an “Update” button.",
-      "foot.legal": "KIRMC is not affiliated with Mojang or Microsoft. Minecraft is a trademark of Mojang AB."
+      "q4": "Where do I buy and equip cosmetics?", "a4": "In the launcher: Characters → Shop. On this site you can browse them and try them on your skin.",
+      "q5": "I'm new, is there a gift?", "a5": "Yes: accounts under 30 days old can redeem the code BIENVENIDO-KIRMC in Settings → Promo code and get the Welcome Cape.",
+      "sk.title": "See any skin in 3D", "sk.sub": "Type a Minecraft name to see its skin, and try KIRMC capes and cosmetics on it.", "sk.capes": "Try a cape on", "sk.popular": "Popular cosmetics", "sk.all": "Browse the whole shop",
+      "cp.title": "KIRMC capes", "cp.sub": "Drawn in high resolution, several animated, and they all work as elytra too. Tap one to try it on.", "cp.gift": "New account?", "cp.giftd": "Redeem BIENVENIDO-KIRMC in the launcher (Settings → Promo code) and get the Welcome Cape.",
+      "sh.title": "Cosmetics and emotes", "sh.sub": "The launcher's full catalog. Tap anything to try it on your skin.", "sh.coins": "You earn 10 every day in the launcher and can top up more. Purchases happen in the launcher: Characters → Shop.", "sh.get": "Download launcher",
+      "foot.legal": "KIRMC is not affiliated with Mojang or Microsoft. Minecraft is a trademark of Mojang AB.", "close": "Close",
+      "fit.title": "Fitting room", "fit.clear": "Remove all", "fit.loading": "Loading 3D…", "fit.ph": "Minecraft name", "fit.see": "View", "fit.hint": "Drag to rotate. Cosmetics are bought and equipped in the launcher.",
+      "cat.all": "All", "slot.head": "Head", "slot.hair": "Hair", "slot.face": "Face", "slot.neck": "Neck", "slot.body": "Clothes", "slot.back": "Back", "slot.tool": "Tools", "slot.wings": "Wings", "slot.cape": "Capes",
+      "slot.aura": "Auras", "slot.pet": "Pets", "slot.mini": "Mini Me", "slot.weapon": "Weapons", "slot.trail": "Trails", "slot.gesture": "Emotes",
+      "r.common": "Common", "r.rare": "Rare", "r.epic": "Epic", "r.legendary": "Legendary", "r.exclusive": "Exclusive", "un.promo": "With a code", "un.invite": "Inviting friends", "un.pass": "KIRPASS",
+      "row.featured": "Featured", "row.new": "New", "row.all": "Full catalog",
+      "res.sections": "Sections", "res.items": "Cosmetics", "res.player": "Players and skins", "res.skin": "See the skin of “{n}”", "res.none": "No results. Try a Minecraft name or a cosmetic.",
+      "toast.game": "“{n}” is used in game: hold B to open the emote wheel.", "toast.trail": "“{n}” is a trail: it shows as you move in game.", "toast.noskin": "Couldn't find that skin; showing Steve.", "toast.no3d": "Couldn't load the 3D viewer.",
+      "sec.features": "Features", "sec.shots": "Screenshots", "sec.news": "What's new", "sec.faq": "FAQ", "sec.download": "Download", "sec.shop": "Shop", "sec.capes": "Capes", "sec.skins": "Skins",
+      "ac.profile.t": "Your profile", "ac.profile.d": "Your KIRMC profile, with title, frame, badges and background, is viewed and edited in the launcher.", "ac.profile.p": "Launcher → your avatar → Profile",
+      "ac.chat.t": "Chat", "ac.chat.d": "Chat with your friends in real time, with notifications, from the launcher.", "ac.chat.p": "Launcher → Friends → Chat",
+      "ac.dash.t": "Dashboard", "ac.dash.d": "Your instances, K coins, daily reward and KIRPASS are on the launcher's main screen.", "ac.dash.p": "Launcher → Play",
+      "ac.library.t": "My library", "ac.library.d": "Everything you've earned (cosmetics, capes, emotes) and what you have equipped.", "ac.library.p": "Launcher → Characters",
+      "ac.notif.t": "Notifications", "ac.notif.d": "Friend requests, messages and new-version notices arrive inside the launcher.", "ac.notif.p": "Launcher → bell",
+      "ac.account.t": "Account", "ac.account.d": "Change your name, language and theme, and redeem promo codes.", "ac.account.p": "Launcher → Settings",
+      "ac.add.t": "Add account", "ac.add.d": "Create your free KIRMC account or add your Microsoft account. For safety, this is only done in the launcher.", "ac.add.p": "Launcher → Accounts → Add"
     },
     ja: {
-      "nav.features": "機能", "nav.client": "KIRMC Client", "nav.cosmetics": "コスメ", "nav.download": "ダウンロード",
-      "hero.lead": "鬼の魂を持つ Minecraft ランチャー：ワンクリックのインスタンス、Modrinth の Mod、3D コスメ、フレンド、チャット、そしてモジュール付きの自分だけのクライアント。",
-      "hero.download": "無料ダウンロード", "hero.more": "機能を見る", "hero.meta": "無料 · Windows 10/11 · 自動アップデート",
-      "feat.eyebrow": "オールインワン", "feat.title": "すぐに遊べる", "feat.sub": "Minecraft を遊ぶのに必要なものすべてを、速くてかわいいアプリひとつに。",
-      "f1.t": "ワンクリックのインスタンス", "f1.d": "Vanilla・Forge・Fabric・Quilt。インスタンスごとに Mod・ワールド・設定、Java は自動。",
-      "f2.t": "Modrinth 内蔵", "f2.d": "Mod・シェーダー・リソースパック・Modpack を検索してインストール。",
-      "f3.t": "プレミアムもオフラインも", "f3.d": "Microsoft でログイン、またはオフラインでプレイ。スキンとマントも表示（skinfix）。",
-      "f4.t": "3D コスメ", "f4.d": "ゲーム内で見える、和風オリジナルコスメ 25 種類。",
-      "f5.t": "フレンドとチャット", "f5.d": "フレンドを追加し、誰が遊んでいるか確認、リアルタイムでチャット。通知つき。",
-      "f6.t": "いつも最新", "f6.d": "新しいバージョンが出るとお知らせし、ワンクリックで自動更新。",
-      "client.sub": "「Minecraft ft. KIRMC」メニューの専用インスタンス。右Shiftで各モジュールを好きな場所に配置。",
+      "nav.client": "クライアント", "new": "NEW", "nav.capes": "マント", "nav.shop": "ショップ", "nav.explore": "さがす", "search.ph": "プレイヤー・スキン・コスメを検索…",
+      "ex.features": "機能", "ex.emotes": "エモートとダンス", "ex.shots": "スクリーンショット", "ex.news": "新着情報", "ex.faq": "よくある質問", "ex.download": "ダウンロード",
+      "acct.guest": "ゲスト", "acct.sub": "KIRMC アカウントはランチャーで使います", "acct.profile": "プロフィール", "acct.chat": "チャット", "acct.dash": "ダッシュボード", "acct.library": "マイライブラリ",
+      "acct.notif": "通知", "acct.account": "アカウント", "acct.add": "アカウントを追加",
+      "hero.t1": "ランチャーひとつで。", "hero.t2": "Minecraft のすべてを。", "hero.lead": "KIRMC はインスタンスと Mod、そしてモジュール・3D コスメ・エモート・フレンド・チャットを備えた専用クライアントをひとつにまとめます。速くて、かわいくて、鬼の魂入り。",
+      "hero.download": "無料ダウンロード", "hero.shop": "ショップを見る", "hero.meta": "無料 · Windows 10/11 · 自動アップデート",
+      "st.cos": "3D コスメ", "st.emotes": "エモートとダンス", "st.mods": "HUD モジュール", "st.vers": "対応 Minecraft バージョン",
+      "feat.eyebrow": "機能", "feat.title": "KIRMC にあるもの",
+      "f1.t": "HUD モジュールを自由に", "f1.d": "ゲーム内で右 Shift を押し、各モジュールを好きな場所にドラッグしてサイズ変更。4 つのスタイルと 6 色、すべて自動保存。",
       "m.coords": "座標", "m.armor": "防具", "m.effects": "エフェクト", "m.minimap": "ミニマップ", "m.clock": "時計",
-      "client.t1": "モジュールをドラッグしてサイズ変更。自動で保存。", "client.t2": "4 つのスタイル（KIRMC・ガラス・ソリッド・ミニマル）と 6 色。",
-      "client.t3": "KIRMC を使うプレイヤーの名前の横に鬼アイコン。",
-      "cos.eyebrow": "ショップ", "cos.title": "K コインでコスメ",
-      "cos.sub": "鬼の角、兜、翼、刀、狐の尻尾…毎日 10 K コインを獲得してランチャーで購入。KIRMC を使う他のプレイヤーにもゲーム内で見えます。",
-      "cos.c1": "鬼の角 + 刀", "cos.c2": "兜 + 狐面", "cos.c3": "鬼の翼 + ラーメン帽", "cos.daily": "毎日",
-      "r.common": "コモン", "r.rare": "レア", "r.epic": "エピック", "r.legendary": "レジェンダリー",
-      "gal.eyebrow": "スクリーンショット", "gal.title": "見た目にもこだわって", "gal.sub": "4 つのテーマ、なめらかなアニメーション、Minecraft のサウンド。スペイン語・英語・日本語に対応。",
-      "dl.title": "ラーメンタイム！", "dl.sub": "KIRMC Launcher をダウンロードして、最初のインスタンスを作って遊ぼう。", "dl.btn": "ダウンロード",
-      "dl.java": "Java は自動で用意", "dl.all": "すべてのバージョンと更新履歴",
-      "faq.title": "よくある質問", "q1": "無料ですか？", "a1": "はい。KIRMC Launcher は無料です。K コインは毎日遊んで獲得できます。",
+      "f2.t": "みんなに見える 3D コスメ", "f2.d": "帽子、髪、袖つきの服、翼、オーラ、ペット、背中の道具、自分のスキンのミニ自分。KIRMC を使うプレイヤーにゲーム内で見えます。", "f2.cta": "ショップで試す",
+      "f3.t": "エモートとダンス", "f3.d": "B キーを長押しでエモートホイール。手を振る、座る、踊る。全 22 種、マウスホイールでページ切り替え。", "f3.cta": "エモートを見る",
+      "f4.t": "ワンクリックのインスタンス", "f4.d": "Vanilla・Forge・Fabric・Quilt。それぞれに Mod・ワールド・設定。Java は自動、Modpack は自分のカバー画像を表示。",
+      "f5.t": "Modrinth 内蔵", "f5.d": "Mod・シェーダー・リソースパック・Modpack をランチャーから検索してインストール。",
+      "f6.t": "フレンドとチャット", "f6.d": "フレンドを追加し、誰が遊んでいるか確認、通知つきでリアルタイムにチャット。鬼アイコンが KIRMC ユーザーの目印。",
+      "f7.t": "ちゃんと見えるスキンとマント", "f7.d": "Microsoft アカウントでもオフラインでも、スキンとマントが表示されます。KIRMC のマントはエリトラにもなります。", "f7.cta": "マントを見る",
+      "f8.t": "4 つのテーマ、3 つの言語", "f8.d": "KIRMC・ダーク・Minecraft テーマ、なめらかなアニメーションとゲームのサウンド。スペイン語・英語・日本語対応、自動アップデート。",
+      "gal.eyebrow": "スクリーンショット", "gal.title": "見た目にもこだわって", "news.eyebrow": "新着情報", "news.title": "最新バージョン", "news.loading": "読み込み中…",
+      "dl.all": "すべてのバージョンと更新履歴", "dl.title": "ラーメンタイム！", "dl.sub": "KIRMC Launcher をダウンロードして、最初のインスタンスを作って遊ぼう。", "dl.btn": "ダウンロード", "dl.java": "Java は自動で用意",
+      "faq.title": "よくある質問", "q1": "無料ですか？", "a1": "はい。KIRMC Launcher は無料です。K コインは毎日もらえ、チャージもできます。",
       "q2": "Windows が警告を出します。安全ですか？", "a2": "Microsoft の署名がない新しいアプリでは普通です。「詳細情報」→「実行」を押してください。コードは GitHub にあります。",
       "q3": "正規版の Minecraft は必要？", "a3": "Microsoft アカウント（プレミアム）でログインするか、オフラインで遊べます。フレンド・チャット・K コインには無料の KIRMC アカウントが必要です。",
-      "q4": "アップデートは？", "a4": "自動です。新しいバージョンが出ると「更新」ボタン付きのお知らせが表示されます。",
-      "foot.legal": "KIRMC は Mojang および Microsoft とは無関係です。Minecraft は Mojang AB の商標です。"
+      "q4": "コスメはどこで買って装備する？", "a4": "ランチャーの「キャラクター → ショップ」で。このサイトでは見て、自分のスキンで試着できます。",
+      "q5": "新規ユーザーに特典はある？", "a5": "あります。作成から 30 日未満のアカウントは、設定 → プロモコードで BIENVENIDO-KIRMC を入力すると「ウェルカムマント」がもらえます。",
+      "sk.title": "どんなスキンも 3D で", "sk.sub": "Minecraft の名前を入力してスキンを表示し、KIRMC のマントやコスメを試着。", "sk.capes": "マントを試す", "sk.popular": "人気のコスメ", "sk.all": "ショップをすべて見る",
+      "cp.title": "KIRMC のマント", "cp.sub": "高解像度で描かれ、アニメーションするものも。すべてエリトラとしても使えます。タップで試着。", "cp.gift": "新規アカウント？", "cp.giftd": "ランチャー（設定 → プロモコード）で BIENVENIDO-KIRMC を入力してウェルカムマントをゲット。",
+      "sh.title": "コスメとエモート", "sh.sub": "ランチャーの全カタログ。タップして自分のスキンで試着。", "sh.coins": "ランチャーで毎日 10 もらえ、チャージもできます。購入はランチャーの「キャラクター → ショップ」で。", "sh.get": "ランチャーをダウンロード",
+      "foot.legal": "KIRMC は Mojang および Microsoft とは無関係です。Minecraft は Mojang AB の商標です。", "close": "閉じる",
+      "fit.title": "試着室", "fit.clear": "すべて外す", "fit.loading": "3D を読み込み中…", "fit.ph": "Minecraft の名前", "fit.see": "表示", "fit.hint": "ドラッグで回転。コスメの購入と装備はランチャーで。",
+      "cat.all": "すべて", "slot.head": "頭", "slot.hair": "髪", "slot.face": "顔", "slot.neck": "首", "slot.body": "服", "slot.back": "背中", "slot.tool": "道具", "slot.wings": "翼", "slot.cape": "マント",
+      "slot.aura": "オーラ", "slot.pet": "ペット", "slot.mini": "ミニ自分", "slot.weapon": "武器", "slot.trail": "トレイル", "slot.gesture": "エモート",
+      "r.common": "コモン", "r.rare": "レア", "r.epic": "エピック", "r.legendary": "レジェンダリー", "r.exclusive": "限定", "un.promo": "コードで入手", "un.invite": "友達招待で入手", "un.pass": "KIRPASS",
+      "row.featured": "注目", "row.new": "新着", "row.all": "全カタログ",
+      "res.sections": "セクション", "res.items": "コスメ", "res.player": "プレイヤーとスキン", "res.skin": "「{n}」のスキンを見る", "res.none": "見つかりません。Minecraft の名前かコスメ名で試してください。",
+      "toast.game": "「{n}」はゲーム内で使います：B 長押しでエモートホイール。", "toast.trail": "「{n}」はトレイル：ゲーム内で動くと見えます。", "toast.noskin": "そのスキンが見つからないため、Steve を表示します。", "toast.no3d": "3D ビューアを読み込めませんでした。",
+      "sec.features": "機能", "sec.shots": "スクリーンショット", "sec.news": "新着情報", "sec.faq": "よくある質問", "sec.download": "ダウンロード", "sec.shop": "ショップ", "sec.capes": "マント", "sec.skins": "スキン",
+      "ac.profile.t": "プロフィール", "ac.profile.d": "称号・フレーム・バッジ・背景つきの KIRMC プロフィールは、ランチャーで表示・編集します。", "ac.profile.p": "ランチャー → アバター → プロフィール",
+      "ac.chat.t": "チャット", "ac.chat.d": "ランチャーから、通知つきでフレンドとリアルタイムにチャット。", "ac.chat.p": "ランチャー → フレンド → チャット",
+      "ac.dash.t": "ダッシュボード", "ac.dash.d": "インスタンス、K コイン、デイリー報酬、KIRPASS はランチャーのメイン画面に。", "ac.dash.p": "ランチャー → プレイ",
+      "ac.library.t": "マイライブラリ", "ac.library.d": "手に入れたもの（コスメ・マント・エモート）と装備中のもの。", "ac.library.p": "ランチャー → キャラクター",
+      "ac.notif.t": "通知", "ac.notif.d": "フレンド申請、メッセージ、新バージョンのお知らせはランチャー内に届きます。", "ac.notif.p": "ランチャー → ベル",
+      "ac.account.t": "アカウント", "ac.account.d": "名前・言語・テーマの変更と、プロモコードの入力。", "ac.account.p": "ランチャー → 設定",
+      "ac.add.t": "アカウントを追加", "ac.add.d": "無料の KIRMC アカウント作成や Microsoft アカウントの追加は、安全のためランチャーからのみ行えます。", "ac.add.p": "ランチャー → アカウント → 追加"
     }
   };
-  const ES = {};
-  document.querySelectorAll("[data-t]").forEach((el) => (ES[el.dataset.t] = el.textContent));
-  function setLang(lang) {
-    const dict = I18N[lang] || {};
-    document.documentElement.lang = lang;
-    document.querySelectorAll("[data-t]").forEach((el) => (el.textContent = dict[el.dataset.t] ?? ES[el.dataset.t]));
-    document.querySelectorAll(".lang button").forEach((b) => b.classList.toggle("on", b.dataset.lang === lang));
-    try { localStorage.setItem("kirmc-lang", lang); } catch {}
+  const ES = { ...ES_DYN };
+  let lang = "es";
+  const t = (key, vars) => { let s = (I18N[lang] || {})[key] ?? ES[key] ?? key; for (const k in vars || {}) s = s.replace("{" + k + "}", vars[k]); return s; };
+  const $ = (sel, root = document) => root.querySelector(sel), $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+  // Probadores (uno por página con visor): se crean antes de recoger los textos en español
+  $$("[data-fitting]").forEach((el) => el.appendChild($("#fitting-tpl").content.cloneNode(true)));
+  $$("[data-t]").forEach((el) => (ES[el.dataset.t] ??= el.textContent));
+  $$("[data-tp]").forEach((el) => (ES[el.dataset.tp] ??= el.placeholder));
+
+  function setLang(next) {
+    lang = next;
+    document.documentElement.lang = next;
+    $$("[data-t]").forEach((el) => (el.textContent = t(el.dataset.t)));
+    $$("[data-tp]").forEach((el) => (el.placeholder = t(el.dataset.tp)));
+    $$(".lang button").forEach((b) => b.classList.toggle("on", b.dataset.lang === next));
+    try { localStorage.setItem("kirmc-lang", next); } catch {}
+    renderShop();
   }
-  document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+  $$(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+  // ---------- Menús ----------
+  const drops = $$(".drop");
+  const closeDrops = (except) => drops.forEach((d) => { if (d !== except) { d.classList.remove("open"); d.firstElementChild.setAttribute("aria-expanded", "false"); } });
+  drops.forEach((d) => d.firstElementChild.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeDrops(d);
+    d.firstElementChild.setAttribute("aria-expanded", String(d.classList.toggle("open")));
+  }));
+  document.addEventListener("click", (e) => { if (!e.target.closest(".menu")) closeDrops(); if (!e.target.closest("#search")) $("#results").hidden = true; });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrops(); $("#results").hidden = true; } });
+  $("#burger").addEventListener("click", () => $("#burger").setAttribute("aria-expanded", String($("#nav").classList.toggle("open"))));
+  $("#links").addEventListener("click", (e) => { if (e.target.closest("a")) { $("#nav").classList.remove("open"); closeDrops(); } });
+
+  // Cuenta: en la web no se inicia sesión; cada opción dice dónde está en el launcher
+  const dlg = $("#dlg");
+  $$("[data-acct]").forEach((b) => b.addEventListener("click", () => {
+    const k = "ac." + b.dataset.acct;
+    $("#dlg-t").textContent = t(k + ".t"); $("#dlg-d").textContent = t(k + ".d"); $("#dlg-p").textContent = t(k + ".p");
+    closeDrops();
+    dlg.showModal();
+  }));
+  $("#dlg-x").addEventListener("click", () => dlg.close());
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+
+  let toastTimer;
+  function toast(msg) { const el = $("#toast"); el.textContent = msg; el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => (el.hidden = true), 3800); }
+
+  // ---------- Catálogo y visor 3D (el mismo módulo que usa el launcher) ----------
+  let shopP = null, ITEMS = [], BY_ID = {};
+  const shop = () => (shopP ??= import("./shop.js").then((m) => {
+    ITEMS = m.items; BY_ID = Object.fromEntries(ITEMS.map((i) => [i.id, i]));
+    $("#st-cos").textContent = ITEMS.length;
+    return m;
+  }));
+  const nameOf = (it) => it.name[lang] || it.name.es;
+  const SLOT_ORDER = ["head", "hair", "face", "neck", "body", "back", "tool", "wings", "cape", "aura", "pet", "mini", "weapon", "trail", "gesture"];
+  const FEATURED = ["aura_enchant", "chest_skin", "bunny_ears", "cape_nether_portal", "tool_netherite_pickaxe", "emote_sixseven", "cape_end_portal", "emote_griddy"];
+  const NEW_IDS = ["emote_floss", "emote_dab", "emote_macarena", "emote_robot", "cape_end_gateway", "tool_diamond_axe", "tool_gold_shovel", "emote_headspin"];
+
+  const state = { name: "", worn: [], cat: "all" };
+  try { state.name = localStorage.getItem("kirmc-skin") || ""; } catch {}
+  const skinUrl = (n) => "https://mc-heads.net/skin/" + encodeURIComponent(n || "MHF_Steve");
+  const fittings = new Map(); // elemento → { viewer, name }
+
+  function priceHtml(it) {
+    if (it.rarity === "exclusive") return esc(t("un." + (it.unlock || "promo")));
+    return '<span class="kc">K</span>' + it.price.toLocaleString(lang === "en" ? "en-US" : "es-ES");
+  }
+  const cardHtml = (it) => `<button class="item r-${it.rarity}${state.worn.includes(it.id) ? " on" : ""}" data-id="${esc(it.id)}">
+    <span class="tag">${esc(t("r." + it.rarity))}</span><span class="thumb"><img alt="" data-thumb="${esc(it.id)}"></span>
+    <span class="iname">${esc(nameOf(it))}</span><span class="imeta">${priceHtml(it)}</span></button>`;
+
+  // Miniaturas: se renderizan cuando la tarjeta entra en pantalla
+  const thumbIO = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    thumbIO.unobserve(e.target);
+    shop().then((m) => m.thumb(e.target.dataset.thumb)).then((url) => (e.target.src = url)).catch(() => {});
+  }), { rootMargin: "300px" });
+  function fill(el, list) {
+    el.innerHTML = list.length ? list.map(cardHtml).join("") : "";
+    $$("[data-thumb]", el).forEach((img) => thumbIO.observe(img));
+  }
+  const pick = (ids) => ids.map((id) => BY_ID[id]).filter(Boolean);
+
+  function renderShop() {
+    if (!ITEMS.length) return;
+    const counts = {};
+    ITEMS.forEach((i) => (counts[i.slot] = (counts[i.slot] || 0) + 1));
+    $("#cats").innerHTML = ["all", ...SLOT_ORDER.filter((s) => counts[s])].map((s) =>
+      `<button data-cat="${s}" class="${state.cat === s ? "on" : ""}">${esc(t(s === "all" ? "cat.all" : "slot." + s))}<small>${s === "all" ? ITEMS.length : counts[s]}</small></button>`).join("");
+    const rows = $("#shop-rows");
+    const row = (title, id) => `<div class="row-title"><h3>${esc(title)}</h3></div><div class="grid" id="${id}"></div>`;
+    if (state.cat === "all") {
+      rows.innerHTML = row(t("row.featured"), "g-feat") + row(t("row.new"), "g-new") + row(t("row.all"), "g-all");
+      fill($("#g-feat"), pick(FEATURED)); fill($("#g-new"), pick(NEW_IDS)); fill($("#g-all"), ITEMS);
+    } else {
+      rows.innerHTML = row(t("slot." + state.cat), "g-all");
+      fill($("#g-all"), ITEMS.filter((i) => i.slot === state.cat));
+    }
+    fill($("#capes-grid"), ITEMS.filter((i) => i.slot === "cape"));
+    fill($("#skin-capes"), ITEMS.filter((i) => i.slot === "cape").slice(0, 6));
+    fill($("#skin-cos"), pick(["bunny_ears", "aura_enchant", "chest_skin", "oni_horns", "tool_diamond_pickaxe", "hoodie_red", "varsity_jacket", "knight_pauldrons"]).slice(0, 6));
+    renderWorn();
+  }
+  function renderWorn() {
+    $$(".worn").forEach((el) => (el.innerHTML = state.worn.map((id) => BY_ID[id]).filter(Boolean).map((it) => `<button data-off="${esc(it.id)}">${esc(nameOf(it))}</button>`).join("")));
+    $$(".item").forEach((el) => el.classList.toggle("on", state.worn.includes(el.dataset.id)));
+    fittings.forEach((f) => f.viewer.wear(state.worn));
+  }
+  function toggle(id) {
+    const it = BY_ID[id];
+    if (!it) return;
+    if (it.kind === "gesture") return toast(t("toast.game", { n: nameOf(it) }));
+    if (it.kind === "trail") return toast(t("toast.trail", { n: nameOf(it) }));
+    // Una capa 3D y una capa normal no se llevan a la vez; uno por ranura
+    state.worn = state.worn.includes(id) ? state.worn.filter((w) => w !== id) : [...state.worn.filter((w) => BY_ID[w]?.slot !== it.slot), id];
+    renderWorn();
+  }
+  document.addEventListener("click", (e) => {
+    const item = e.target.closest(".item[data-id]"), off = e.target.closest("[data-off]"), cat = e.target.closest("[data-cat]");
+    if (item) { toggle(item.dataset.id); if (currentView === "skins" || matchMedia("(max-width: 900px)").matches) activeFitting()?.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+    else if (off) toggle(off.dataset.off);
+    else if (cat) { state.cat = cat.dataset.cat; renderShop(); }
+    else if (e.target.closest("[data-clear]")) { state.worn = []; renderWorn(); }
+  });
+
+  function setSkin(name) {
+    state.name = name;
+    try { localStorage.setItem("kirmc-skin", name); } catch {}
+    $$(".namebox input").forEach((i) => (i.value = name));
+    fittings.forEach((f) => loadSkin(f));
+  }
+  function loadSkin(f) {
+    if (f.name === state.name) return;
+    f.name = state.name;
+    f.viewer.setSkin(skinUrl(state.name)).catch(() => { toast(t("toast.noskin")); return f.viewer.setSkin(skinUrl("")); }).catch(() => {});
+  }
+  const activeFitting = () => $(`main[data-view="${currentView}"] [data-fitting]`);
+  /** Crea el visor de la página visible (uno por página, solo cuando hace falta) */
+  function ensureFitting() {
+    const el = activeFitting();
+    if (!el) return;
+    $(".namebox input", el).value = state.name;
+    if (fittings.has(el)) { loadSkin(fittings.get(el)); return; }
+    shop().then((m) => {
+      if (fittings.has(el)) return;
+      const f = { viewer: m.createViewer($("canvas", el)), name: null };
+      fittings.set(el, f);
+      $(".wait", el).hidden = true;
+      loadSkin(f);
+      f.viewer.wear(state.worn);
+    }).catch(() => { $(".wait", el).textContent = t("toast.no3d"); });
+  }
+  document.addEventListener("submit", (e) => {
+    const form = e.target.closest(".namebox");
+    if (!form) return;
+    e.preventDefault();
+    const n = form.n.value.trim();
+    if (!n || /^[A-Za-z0-9_]{1,16}$/.test(n)) setSkin(n);
+    else toast(t("toast.noskin"));
+  });
+
+  // ---------- Páginas (enrutado por hash) ----------
+  let currentView = "home";
+  const VIEWS = ["home", "skins", "capas", "tienda"];
+  function route() {
+    const h = location.hash || "#/";
+    let view = "home", anchor = null, params = new URLSearchParams();
+    if (h.startsWith("#/")) { const [p, qs] = h.slice(2).split("?"); view = VIEWS.includes(p) ? p : "home"; params = new URLSearchParams(qs || ""); }
+    else anchor = h.slice(1);
+    const changed = view !== currentView;
+    currentView = view;
+    $$("main[data-view]").forEach((m) => (m.hidden = m.dataset.view !== view));
+    $$("[data-nav]").forEach((a) => a.classList.toggle("on", a.dataset.nav === view));
+    if (view !== "home") {
+      if (params.get("cat") && SLOT_ORDER.includes(params.get("cat"))) state.cat = params.get("cat");
+      const skin = params.get("skin");
+      if (skin && /^[A-Za-z0-9_]{1,16}$/.test(skin)) setSkin(skin);
+      shop().then(() => { renderShop(); ensureFitting(); }).catch(() => toast(t("toast.no3d")));
+    }
+    if (anchor) requestAnimationFrame(() => document.getElementById(anchor)?.scrollIntoView());
+    else if (changed || h === "#/") scrollTo(0, 0);
+  }
+  addEventListener("hashchange", route);
+
+  // ---------- Buscador: secciones, cosméticos y skins por nombre ----------
+  const SECTIONS = [["sec.features", "#funciones"], ["sec.skins", "#/skins"], ["sec.capes", "#/capas"], ["sec.shop", "#/tienda"], ["sec.shots", "#galeria"], ["sec.news", "#novedades"], ["sec.faq", "#faq"], ["sec.download", "#descargar"]];
+  const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  function search() {
+    const raw = $("#q").value.trim(), q = norm(raw), box = $("#results");
+    if (!q) { box.hidden = true; return; }
+    let html = "";
+    const secs = SECTIONS.filter(([k]) => norm(t(k)).includes(q));
+    if (secs.length) html += `<h5>${esc(t("res.sections"))}</h5>` + secs.map(([k, href]) => `<a href="${href}">${esc(t(k))}</a>`).join("");
+    const found = ITEMS.filter((i) => norm(nameOf(i)).includes(q) || norm(i.name.es).includes(q) || norm(t("slot." + i.slot)).includes(q)).slice(0, 7);
+    if (found.length) html += `<h5>${esc(t("res.items"))}</h5>` + found.map((i) => `<a href="#/tienda?cat=${i.slot}" data-try="${esc(i.id)}"><img alt="" data-rthumb="${esc(i.id)}">${esc(nameOf(i))}<small>${esc(t("slot." + i.slot))}</small></a>`).join("");
+    if (/^[A-Za-z0-9_]{3,16}$/.test(raw)) html += `<h5>${esc(t("res.player"))}</h5><a href="#/skins?skin=${encodeURIComponent(raw)}"><img alt="" src="https://mc-heads.net/avatar/${encodeURIComponent(raw)}/30">${esc(t("res.skin", { n: raw }))}</a>`;
+    box.innerHTML = html || `<p>${esc(t("res.none"))}</p>`;
+    box.hidden = false;
+    $$("[data-rthumb]", box).forEach((img) => shop().then((m) => m.thumb(img.dataset.rthumb)).then((u) => (img.src = u)).catch(() => {}));
+  }
+  $("#q").addEventListener("input", search);
+  $("#q").addEventListener("focus", () => { shop().then(search).catch(() => {}); });
+  $("#q").addEventListener("keydown", (e) => { if (e.key === "Enter") { const first = $("#results a"); if (first) first.click(); } });
+  $("#results").addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if (!a) return;
+    const id = a.dataset.try;
+    if (id && BY_ID[id] && !state.worn.includes(id) && BY_ID[id].kind !== "gesture" && BY_ID[id].kind !== "trail") { state.worn = [...state.worn.filter((w) => BY_ID[w]?.slot !== BY_ID[id].slot), id]; }
+    $("#results").hidden = true; $("#q").value = ""; $("#q").blur();
+  });
+
+  // ---------- Última versión y novedades (GitHub) ----------
+  fetch("https://api.github.com/repos/kirpulrbx-max/KIRMC-Launcher/releases?per_page=3")
+    .then((r) => (r.ok ? r.json() : null))
+    .then((list) => {
+      if (!Array.isArray(list) || !list.length) throw 0;
+      const rel = list[0];
+      $$(".js-version").forEach((el) => (el.textContent = rel.tag_name));
+      const setup = (rel.assets || []).find((a) => a.name === "KIRMC-Launcher-Setup.exe");
+      if (setup) $$(".js-size").forEach((el) => (el.textContent = (setup.size / 1048576).toFixed(1).replace(".", ",") + " MB"));
+      $$(".js-date").forEach((el) => (el.textContent = new Date(rel.published_at).toLocaleDateString()));
+      $("#news").innerHTML = list.map((r) => {
+        const lines = String(r.body || "").split("\n").map((l) => l.trim()).filter((l) => l.startsWith("- ")).slice(0, 5).map((l) => `<li>${esc(l.slice(2).replace(/\*\*|`/g, ""))}</li>`).join("");
+        return `<article><h4>${esc(r.name || r.tag_name)}</h4><time>${new Date(r.published_at).toLocaleDateString()}</time>${lines ? `<ul>${lines}</ul>` : ""}</article>`;
+      }).join("");
+    })
+    .catch(() => { $("#news").innerHTML = ""; });
+  $$(".js-year").forEach((el) => (el.textContent = new Date().getFullYear()));
+
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: 0.12 });
+  $$(".reveal").forEach((el) => io.observe(el));
+
   let saved = null;
   try { saved = localStorage.getItem("kirmc-lang"); } catch {}
   const browser = (navigator.language || "es").slice(0, 2);
   setLang(saved || (I18N[browser] ? browser : "es"));
-
-  // Versión, tamaño y fecha de la última release
-  fetch("https://api.github.com/repos/kirpulrbx-max/KIRMC-Launcher/releases/latest")
-    .then((r) => (r.ok ? r.json() : null))
-    .then((rel) => {
-      if (!rel) return;
-      document.querySelectorAll(".js-version").forEach((el) => (el.textContent = rel.tag_name));
-      const setup = (rel.assets || []).find((a) => a.name === "KIRMC-Launcher-Setup.exe");
-      if (setup) document.querySelectorAll(".js-size").forEach((el) => (el.textContent = (setup.size / 1048576).toFixed(1).replace(".", ",") + " MB"));
-      document.querySelectorAll(".js-date").forEach((el) => (el.textContent = new Date(rel.published_at).toLocaleDateString()));
-    })
-    .catch(() => {});
-  document.querySelectorAll(".js-year").forEach((el) => (el.textContent = new Date().getFullYear()));
-
-  // Aparición suave al hacer scroll
-  const io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  route();
 </script>
 </body>
 </html>
